@@ -1,0 +1,226 @@
+Table users {
+  id string [pk]
+  name string
+  email string
+  password_hash string
+  role enum
+  status ROLE
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+enum ROLE {
+  "ADMIN"
+  "EVENT_ORGANIZER"
+  "TENANT"
+  "MASYARAKAT"
+}
+
+Table tenants {
+  id string [pk]
+  user_id string
+  organization_name string
+  contact_person string
+  contact_phone string
+  address string
+  registration_status enum
+  registered_at timestamp
+  approved_by string
+  approved_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table event_organizers {
+  id string [pk]
+  user_id string
+  organization_name string
+  contact_person string
+  contact_phone string
+  address string
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table venues {
+  id string [pk]
+  name string
+  address string
+  capacity int
+  description string
+  lowest_price decimal
+  highest_price decimal
+  available_from timestamp
+  available_to timestamp
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table events {
+  id string [pk]
+  name string
+  description string
+  organizer_id string
+
+  venue_type enum // INTERNAL, EXTERNAL
+  venue_id string [null] // hanya diisi kalau venue_type = INTERNAL
+
+  external_venue_name string [null]
+  external_venue_address string [null]
+  external_venue_capacity int [null]
+
+  event_start timestamp
+  event_end timestamp
+  slot_size int
+  capacity int
+  status enum
+
+  approved_by string [null]
+  approved_at timestamp [null]
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table venue_bookings {
+  id string [pk]
+  venue_id string
+  organizer_id string
+  event_id string [null]
+
+  booking_start timestamp
+  booking_end timestamp
+  status enum
+
+  requested_at timestamp
+  approved_by string [null]
+  approved_at timestamp [null]
+  final_price decimal [null]
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table event_slots {
+  id string [pk]
+  event_id string
+  slot_number int
+  date_start timestamp
+  date_end timestamp
+  slot_width int
+  slot_long int
+  price decimal
+  is_booked bool
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table event_registrations {
+  id string [pk]
+
+  event_id string
+  tenant_id string
+
+  registration_status enum // PENDING, APPROVED, REJECTED, CANCELLED
+  registered_at timestamp
+
+  approved_by string [null]
+  approved_at timestamp [null]
+  rejection_reason text [null]
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp [null]
+}
+
+Table registration_documents {
+  id string [pk]
+
+  event_registration_id string
+  document_type enum // KTP, KK, PHOTO, BUSINESS_LICENSE, OTHER
+  file_url text
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp [null]
+}
+
+Table registration_slots {
+  id string [pk]
+
+  event_registration_id string
+  slot_id string
+
+  status enum // ASSIGNED, CANCELLED
+  assigned_at timestamp
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp [null]
+}
+
+Table registration_attendances {
+  id string [pk]
+
+  event_registration_id string
+  attendance_status enum // NOT_CHECKED_IN, PRESENT, ABSENT
+  checked_in_at timestamp [null]
+  notes text [null]
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table participant_registration {
+  id string [pk]
+
+  event_id string
+  user_id string
+
+  registered_at timestamp
+
+  attendance_status enum // NOT_CHECKED_IN, PRESENT, ABSENT
+  checked_in_at timestamp [null]
+
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp [null]
+}
+
+
+/* ================= RELATIONSHIPS ================= */
+
+Ref: tenants.user_id > users.id
+Ref: event_organizers.user_id > users.id
+
+Ref: events.organizer_id > event_organizers.id
+Ref: events.venue_id > venues.id
+
+
+Ref: venue_bookings.venue_id > venues.id
+Ref: venue_bookings.organizer_id > event_organizers.id
+Ref: venue_bookings.event_id > events.id
+
+Ref: event_slots.event_id > events.id
+
+Ref: event_registrations.event_id > events.id
+Ref: event_registrations.tenant_id > tenants.id
+Ref: event_registrations.approved_by > users.id
+
+Ref: registration_documents.event_registration_id > event_registrations.id
+
+Ref: registration_slots.event_registration_id > event_registrations.id
+Ref: registration_slots.slot_id > event_slots.id
+
+Ref: registration_attendances.event_registration_id > event_registrations.id
+
+Ref: participant_registration.event_id > events.id
+Ref: participant_registration.user_id > users.id
+
