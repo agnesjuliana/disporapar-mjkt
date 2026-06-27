@@ -4,8 +4,8 @@
 
     <div class="relative z-10 w-full max-w-lg fade-in">
         <div class="text-center mb-6">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 mb-3 shadow-lg shadow-blue-500/30">
-                <i data-lucide="calendar-days" class="w-6 h-6 text-white"></i>
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white/95 mb-3 shadow-lg shadow-orange-700/20 p-1.5">
+                <img src="{{ asset('images/brand-colored.png') }}" alt="{{ config('app.name', 'WARTA WILWATIKTA') }}" class="w-full h-full object-contain">
             </div>
             <h1 class="text-xl font-bold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</h1>
             <p class="text-slate-400 text-sm">Daftar sebagai Event Organizer</p>
@@ -33,7 +33,7 @@
                                 <i data-lucide="user" class="w-4 h-4 text-slate-500"></i>
                             </div>
                             <input type="text" name="name" id="name" required placeholder="Nama lengkap penanggung jawab"
-                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500"
+                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500"
                                    value="{{ old('name') }}">
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                 <i data-lucide="mail" class="w-4 h-4 text-slate-500"></i>
                             </div>
                             <input type="email" name="email" id="email" required placeholder="email@contoh.com"
-                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500"
+                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500"
                                    value="{{ old('email') }}">
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                                 <i data-lucide="phone" class="w-4 h-4 text-slate-500"></i>
                             </div>
                             <input type="tel" name="phone" id="phone" required placeholder="08xxxxxxxxx"
-                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500"
+                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500"
                                    value="{{ old('phone') }}">
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                 <i data-lucide="building" class="w-4 h-4 text-slate-500"></i>
                             </div>
                             <input type="text" name="org_name" id="org_name" required placeholder="Nama organisasi event organizer"
-                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500"
+                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500"
                                    value="{{ old('org_name') }}">
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     <div class="sm:col-span-2">
                         <label class="form-label text-slate-300" for="address">Alamat</label>
                         <textarea name="address" id="address" required rows="2" placeholder="Alamat organisasi"
-                                  class="form-textarea bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500 resize-none">{{ old('address') }}</textarea>
+                                  class="form-textarea bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500 resize-none">{{ old('address') }}</textarea>
                     </div>
 
                     <div>
@@ -87,7 +87,7 @@
                                 <i data-lucide="lock" class="w-4 h-4 text-slate-500"></i>
                             </div>
                             <input type="password" name="password" id="password" required placeholder="Min. 8 karakter"
-                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500">
+                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500">
                         </div>
                     </div>
 
@@ -98,14 +98,14 @@
                                 <i data-lucide="lock-keyhole" class="w-4 h-4 text-slate-500"></i>
                             </div>
                             <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="Ulangi password"
-                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-blue-500">
+                                   class="form-input pl-9 bg-slate-800 border-slate-700 text-white placeholder-slate-500 focus:border-teal-500">
                         </div>
                     </div>
                 </div>
 
                 <button type="submit" id="organizer-btn"
                         class="w-full btn py-2.5 justify-center text-sm font-semibold text-white"
-                        style="background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 4px 15px rgba(37,99,235,.3)">
+                        style="background:linear-gradient(135deg,#0f766e,#115e59);box-shadow:0 4px 15px rgba(15,118,110,.28)">
                     <i data-lucide="user-plus" class="w-4 h-4"></i>
                     Buat Akun Event Organizer
                 </button>

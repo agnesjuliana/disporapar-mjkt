@@ -17,6 +17,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ config('app.description') }}">
     <title>{{ $title }} | {{ config('app.name', 'WARTA WILWATIKTA') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/brand-colored.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/brand-colored.png') }}">
     <script>
         (function () {
             const theme = localStorage.getItem('theme');

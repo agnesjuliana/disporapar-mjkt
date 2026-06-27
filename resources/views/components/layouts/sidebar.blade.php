@@ -15,8 +15,8 @@
 
 <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 z-40 flex flex-col overflow-hidden border-r -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="flex items-center gap-3 px-4 h-16 border-b border-slate-800 flex-shrink-0">
-        <div class="sidebar-logo-icon w-9 h-9 rounded-xl bg-white/90 text-[#9f1239] shadow-sm ring-1 ring-white/50 flex items-center justify-center flex-shrink-0">
-            <i data-lucide="{{ $config['icon'] }}" class="w-5 h-5"></i>
+        <div class="sidebar-logo-icon w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <img src="{{ asset('images/brand-white.png') }}" alt="{{ config('app.name', 'WARTA WILWATIKTA') }}" class="w-full h-full object-contain drop-shadow-sm">
         </div>
         <div class="sidebar-logo-text overflow-hidden">
             <div class="text-white font-bold text-sm leading-tight">{{ config('app.name', 'WARTA WILWATIKTA') }}</div>

@@ -4,8 +4,8 @@
 
     <div class="relative z-10 w-full max-w-md fade-in">
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 mb-4 shadow-lg shadow-orange-700/30">
-                <i data-lucide="zap" class="w-7 h-7 text-white"></i>
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/95 mb-4 shadow-lg shadow-orange-700/30 p-2">
+                <img src="{{ asset('images/brand-colored.png') }}" alt="{{ config('app.name', 'WARTA WILWATIKTA') }}" class="w-full h-full object-contain">
             </div>
             <h1 class="text-2xl font-bold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</h1>
             <p class="text-slate-400 text-sm mt-1">{{ config('app.description') }}</p>

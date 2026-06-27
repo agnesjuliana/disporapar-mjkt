@@ -4,8 +4,8 @@
 
     <div class="relative z-10 w-full max-w-lg fade-in">
         <div class="text-center mb-6">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-500 mb-3 shadow-lg shadow-orange-500/30">
-                <i data-lucide="store" class="w-6 h-6 text-white"></i>
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white/95 mb-3 shadow-lg shadow-orange-700/20 p-1.5">
+                <img src="{{ asset('images/brand-colored.png') }}" alt="{{ config('app.name', 'WARTA WILWATIKTA') }}" class="w-full h-full object-contain">
             </div>
             <h1 class="text-xl font-bold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</h1>
             <p class="text-slate-400 text-sm">Daftar sebagai Tenant / UMKM</p>
