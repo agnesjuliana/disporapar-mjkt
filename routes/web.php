@@ -30,6 +30,9 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+    Route::get('/verify-email', [AuthController::class, 'showVerification'])->name('verification.notice');
+    Route::post('/verify-email', [AuthController::class, 'verifyEmail'])->name('verification.verify');
+    Route::post('/verify-email/resend', [AuthController::class, 'resendVerificationOtp'])->name('verification.resend');
     Route::get('/register', [AuthController::class, 'chooseRole'])->name('register');
     Route::get('/register/masyarakat', [AuthController::class, 'showMasyarakatRegistration'])->name('register.masyarakat');
     Route::post('/register/masyarakat', [AuthController::class, 'registerMasyarakat'])->name('register.masyarakat.store');

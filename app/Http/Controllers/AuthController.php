@@ -9,6 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -35,6 +37,19 @@ class AuthController extends Controller
             return back()
                 ->withErrors(['email' => 'Email atau password salah.'])
                 ->onlyInput('email');
+        }
+
+        $user = $request->user();
+        if (! $user->is_verified) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            $this->sendVerificationOtp($user);
+
+            return redirect()
+                ->route('verification.notice', ['email' => $user->email])
+                ->with('status', 'Email belum diverifikasi. Kode OTP baru telah dikirim.');
         }
 
         $request->session()->regenerate();
@@ -64,18 +79,21 @@ class AuthController extends Controller
     {
         $validated = $this->validateUserRegistration($request);
 
-        User::create([
+        $user = User::create([
             'id' => (string) Str::uuid(),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password_hash' => $validated['password'],
             'role' => 'MASYARAKAT',
             'status' => 'MASYARAKAT',
+            'is_verified' => false,
         ]);
 
+        $this->sendVerificationOtp($user);
+
         return redirect()
-            ->route('login')
-            ->with('status', 'Pendaftaran berhasil. Silakan masuk menggunakan akun Anda.');
+            ->route('verification.notice', ['email' => $user->email])
+            ->with('status', 'Pendaftaran berhasil. Masukkan kode OTP yang dikirim ke email Anda.');
     }
 
     public function showTenantRegistration(): View|RedirectResponse
@@ -98,7 +116,7 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
-        DB::transaction(function () use ($validated) {
+        $user = DB::transaction(function () use ($validated) {
             $user = User::create([
                 'id' => (string) Str::uuid(),
                 'name' => $validated['name'],
@@ -106,6 +124,7 @@ class AuthController extends Controller
                 'password_hash' => $validated['password'],
                 'role' => 'TENANT',
                 'status' => 'TENANT',
+                'is_verified' => false,
             ]);
 
             Tenant::create([
@@ -118,11 +137,15 @@ class AuthController extends Controller
                 'registration_status' => 'PENDING',
                 'registered_at' => now(),
             ]);
+
+            return $user;
         });
 
+        $this->sendVerificationOtp($user);
+
         return redirect()
-            ->route('login')
-            ->with('status', 'Pendaftaran berhasil. Akun Anda sedang menunggu verifikasi Admin.');
+            ->route('verification.notice', ['email' => $user->email])
+            ->with('status', 'Pendaftaran berhasil. Masukkan kode OTP yang dikirim ke email Anda, lalu tunggu verifikasi Admin.');
     }
 
     public function showEventOrganizerRegistration(): View|RedirectResponse
@@ -145,7 +168,7 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
-        DB::transaction(function () use ($validated) {
+        $user = DB::transaction(function () use ($validated) {
             $user = User::create([
                 'id' => (string) Str::uuid(),
                 'name' => $validated['name'],
@@ -153,6 +176,7 @@ class AuthController extends Controller
                 'password_hash' => $validated['password'],
                 'role' => 'EVENT_ORGANIZER',
                 'status' => 'EVENT_ORGANIZER',
+                'is_verified' => false,
             ]);
 
             EventOrganizer::create([
@@ -163,11 +187,91 @@ class AuthController extends Controller
                 'contact_phone' => $validated['phone'],
                 'address' => $validated['address'],
             ]);
+
+            return $user;
         });
+
+        $this->sendVerificationOtp($user);
+
+        return redirect()
+            ->route('verification.notice', ['email' => $user->email])
+            ->with('status', 'Pendaftaran event organizer berhasil. Masukkan kode OTP yang dikirim ke email Anda.');
+    }
+
+    public function showVerification(Request $request): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
+        $email = $request->string('email')->toString();
+        abort_if($email === '', 404);
+
+        return view('auth.verify-email', [
+            'email' => $email,
+        ]);
+    }
+
+    public function verifyEmail(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+            'otp' => ['required', 'digits:6'],
+        ]);
+
+        $user = User::query()
+            ->where('email', $validated['email'])
+            ->firstOrFail();
+
+        if ($user->is_verified) {
+            return redirect()
+                ->route('login')
+                ->with('status', 'Email sudah terverifikasi. Silakan masuk.');
+        }
+
+        if (
+            ! $user->email_verification_otp_hash
+            || ! $user->email_verification_otp_expires_at
+            || $user->email_verification_otp_expires_at->isPast()
+            || ! Hash::check($validated['otp'], $user->email_verification_otp_hash)
+        ) {
+            return back()
+                ->withErrors(['otp' => 'Kode OTP salah atau sudah kedaluwarsa.'])
+                ->onlyInput('email');
+        }
+
+        $user->update([
+            'is_verified' => true,
+            'email_verification_otp_hash' => null,
+            'email_verification_otp_expires_at' => null,
+        ]);
 
         return redirect()
             ->route('login')
-            ->with('status', 'Pendaftaran event organizer berhasil. Silakan masuk menggunakan akun Anda.');
+            ->with('status', 'Email berhasil diverifikasi. Silakan masuk.');
+    }
+
+    public function resendVerificationOtp(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+        ]);
+
+        $user = User::query()
+            ->where('email', $validated['email'])
+            ->firstOrFail();
+
+        if ($user->is_verified) {
+            return redirect()
+                ->route('login')
+                ->with('status', 'Email sudah terverifikasi. Silakan masuk.');
+        }
+
+        $this->sendVerificationOtp($user);
+
+        return back()
+            ->with('status', 'Kode OTP baru telah dikirim ke email Anda.')
+            ->withInput(['email' => $user->email]);
     }
 
     public function logout(Request $request): RedirectResponse
@@ -190,5 +294,25 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
+    }
+
+    private function sendVerificationOtp(User $user): void
+    {
+        $otp = (string) random_int(100000, 999999);
+
+        $user->forceFill([
+            'email_verification_otp_hash' => Hash::make($otp),
+            'email_verification_otp_expires_at' => now()->addMinutes(10),
+        ])->save();
+
+        Mail::send('emails.auth.verification-otp', [
+            'user' => $user,
+            'otp' => $otp,
+            'expiresAt' => $user->email_verification_otp_expires_at,
+        ], function ($message) use ($user): void {
+            $message
+                ->to($user->email, $user->name)
+                ->subject('Kode Verifikasi Email Disporapar');
+        });
     }
 }

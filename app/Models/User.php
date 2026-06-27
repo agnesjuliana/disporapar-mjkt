@@ -27,6 +27,9 @@ class User extends Authenticatable
         'password_hash',
         'role',
         'status',
+        'is_verified',
+        'email_verification_otp_hash',
+        'email_verification_otp_expires_at',
     ];
 
     protected $hidden = [
@@ -83,6 +86,8 @@ class User extends Authenticatable
     {
         return [
             'password_hash' => 'hashed',
+            'is_verified' => 'boolean',
+            'email_verification_otp_expires_at' => 'datetime',
         ];
     }
 }

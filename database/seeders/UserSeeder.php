@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
                 'password_hash' => 'password',
                 'role' => 'ADMIN',
                 'status' => 'ADMIN',
+                'is_verified' => true,
             ],
             [
                 'id' => 'USR-EO-001',
@@ -34,6 +35,7 @@ class UserSeeder extends Seeder
                 'password_hash' => 'password',
                 'role' => 'EVENT_ORGANIZER',
                 'status' => 'EVENT_ORGANIZER',
+                'is_verified' => true,
             ],
             [
                 'id' => 'USR-TENANT-001',
@@ -42,6 +44,7 @@ class UserSeeder extends Seeder
                 'password_hash' => 'password',
                 'role' => 'TENANT',
                 'status' => 'TENANT',
+                'is_verified' => true,
             ],
             [
                 'id' => 'USR-MASYARAKAT-001',
@@ -50,6 +53,7 @@ class UserSeeder extends Seeder
                 'password_hash' => 'password',
                 'role' => 'MASYARAKAT',
                 'status' => 'MASYARAKAT',
+                'is_verified' => true,
             ],
         ];
 

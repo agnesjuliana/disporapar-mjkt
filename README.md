@@ -1,70 +1,75 @@
 # Event Disporapar
 
-Event Disporapar adalah aplikasi web berbasis Laravel untuk membantu pengelolaan event, venue, tenant, event organizer, dan registrasi peserta. Aplikasi ini memakai sistem role sehingga tampilan dashboard dan akses fitur dapat dibedakan berdasarkan jenis pengguna.
+Event Disporapar adalah aplikasi Laravel untuk pengelolaan event daerah Mojokerto. Aplikasi memakai role `ADMIN`, `EVENT_ORGANIZER`, `TENANT`, dan `MASYARAKAT`.
 
 ## Fitur Utama
 
-- Autentikasi login dan registrasi untuk masyarakat, tenant, dan event organizer.
-- Dashboard berbasis role untuk `ADMIN`, `EVENT_ORGANIZER`, `TENANT`, dan `MASYARAKAT`.
-- Manajemen venue oleh admin.
-- Pengajuan booking venue oleh event organizer.
-- Persetujuan atau penolakan booking venue oleh admin.
-- Struktur data untuk event, slot event, registrasi tenant, dokumen registrasi, kehadiran, dan registrasi peserta.
+- Registrasi dan login berbasis role.
+- Verifikasi email dengan OTP untuk registrasi Masyarakat, Event Organizer, dan Tenant.
+- Dashboard dan sidebar berbasis role.
+- Admin venue CRUD dan review booking venue.
+- Event Organizer membuat event, booking venue, mengelola slot, tenant, dan daftar pengunjung.
+- Tenant mencari event, memilih preferensi slot, dan mengajukan booking tenant.
+- Masyarakat melihat kalender event dan mendaftar sebagai peserta.
 
 ## Teknologi
 
 - PHP `^8.3`
-- Laravel `^13.8`
-- SQLite sebagai konfigurasi database default
+- Laravel
+- PostgreSQL
 - Vite
 - Tailwind CSS
+- Mailtrap Email Sandbox untuk email OTP development
 
 ## Persiapan
 
-Pastikan perangkat sudah memiliki:
+Pastikan perangkat memiliki:
 
 - PHP 8.3 atau lebih baru
 - Composer
 - Node.js dan npm
-- SQLite extension untuk PHP
+- PostgreSQL
+- Akun Mailtrap untuk menangkap email OTP saat development
 
-## Cara Menjalankan Project
+## Setup Project
 
-Masuk ke direktori aplikasi Laravel:
+Masuk ke direktori Laravel:
 
 ```bash
 cd laravel-disporapar
 ```
 
-Install dependency PHP:
+Install dependency:
 
 ```bash
 composer install
-```
-
-Install dependency frontend:
-
-```bash
 npm install
 ```
 
-Salin file environment:
+Salin environment:
 
 ```bash
 cp .env.example .env
 ```
 
-Generate application key:
+Generate app key:
 
 ```bash
 php artisan key:generate
 ```
 
-Pastikan database SQLite tersedia:
+Sesuaikan konfigurasi database PostgreSQL di `.env`:
 
-```bash
-touch database/database.sqlite
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=events_db01
+DB_USERNAME=tbs_user
+DB_PASSWORD=s3curepass
 ```
+
+Buat database dan user PostgreSQL sesuai konfigurasi tersebut, atau ubah `.env` mengikuti database lokal Anda.
 
 Jalankan migration dan seeder:
 
@@ -72,7 +77,7 @@ Jalankan migration dan seeder:
 php artisan migrate --seed
 ```
 
-Jalankan server Laravel:
+Jalankan aplikasi:
 
 ```bash
 php artisan serve
@@ -90,9 +95,57 @@ Aplikasi dapat dibuka di:
 http://127.0.0.1:8000
 ```
 
+## Setup Mailtrap Untuk OTP
+
+Registrasi akun baru Masyarakat, Event Organizer, dan Tenant akan mengirim OTP ke email. Untuk development, gunakan Mailtrap Email Sandbox supaya email tidak dikirim ke inbox asli.
+
+Langkah setup:
+
+1. Buat akun di `https://mailtrap.io`.
+2. Masuk ke menu **Email Testing** atau **Email Sandbox**.
+3. Buka inbox sandbox.
+4. Pilih integrasi SMTP.
+5. Salin SMTP username dan password dari Mailtrap.
+6. Isi `.env`:
+
+```env
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=isi_dari_mailtrap
+MAIL_PASSWORD=isi_dari_mailtrap
+MAIL_FROM_ADDRESS="no-reply@disporapar.test"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Setelah mengubah `.env`, bersihkan cache konfigurasi:
+
+```bash
+php artisan config:clear
+```
+
+Saat user baru register, buka inbox Mailtrap untuk melihat email OTP. OTP berlaku selama 10 menit.
+
+## Email Verification Flow
+
+Flow registrasi user baru:
+
+1. User memilih role dan mengisi form registrasi.
+2. Sistem membuat user dengan `is_verified = false`.
+3. Sistem membuat OTP 6 digit, menyimpan hash OTP di database, dan mengirim OTP ke Mailtrap.
+4. User diarahkan ke halaman `/verify-email`.
+5. User memasukkan OTP.
+6. Jika OTP valid dan belum kedaluwarsa, `is_verified` berubah menjadi `true`.
+7. User baru bisa login setelah email terverifikasi.
+
+Login user yang belum terverifikasi akan diblokir dan sistem akan mengirim OTP baru.
+
+Seeder user bawaan sudah dibuat sebagai verified agar akun development tetap bisa langsung login.
+
 ## Akun Seeder
 
-Seeder membuat akun awal berikut. Semua akun memakai password:
+Semua akun seeder memakai password:
 
 ```text
 password
@@ -105,23 +158,21 @@ password
 | Tenant | `tenant@disporapar.test` |
 | Masyarakat | `masyarakat@disporapar.test` |
 
-Seeder utama berada di `database/seeders/DatabaseSeeder.php` dan memanggil `UserSeeder`.
-
 ## Perintah Database
 
-Menjalankan migration saja:
+Menjalankan migration:
 
 ```bash
 php artisan migrate
 ```
 
-Menjalankan seeder saja:
+Menjalankan seeder:
 
 ```bash
 php artisan db:seed
 ```
 
-Reset database, jalankan ulang migration, lalu isi data seeder:
+Reset database dan isi ulang data awal:
 
 ```bash
 php artisan migrate:fresh --seed
@@ -135,7 +186,7 @@ Menjalankan Laravel, queue listener, log viewer, dan Vite secara bersamaan:
 composer run dev
 ```
 
-Build asset frontend untuk produksi:
+Build asset frontend:
 
 ```bash
 npm run build
@@ -149,18 +200,15 @@ composer test
 
 ## Struktur Modul
 
-- `app/Models` berisi model utama seperti `User`, `Venue`, `Event`, `Tenant`, `EventOrganizer`, dan model registrasi.
-- `app/Http/Controllers` berisi controller untuk autentikasi, dashboard, venue, booking venue, event, dan registrasi.
-- `database/migrations` berisi skema tabel aplikasi.
-- `database/seeders` berisi data awal aplikasi.
-- `resources/views` berisi halaman Blade untuk landing page, auth, dashboard, admin, dan event organizer.
+- `app/Models`: model utama seperti `User`, `Event`, `Venue`, `Tenant`, `EventOrganizer`, dan model registrasi.
+- `app/Http/Controllers`: controller auth, dashboard, admin, EO, tenant, masyarakat, venue, event, booking, slot, dan registrasi.
+- `database/migrations`: skema database.
+- `database/seeders`: data awal development.
+- `resources/views`: Blade views untuk auth, dashboard, admin, EO, tenant, dan masyarakat.
 
-## Catatan Environment
+## Catatan Keamanan
 
-Konfigurasi default memakai SQLite:
-
-```env
-DB_CONNECTION=sqlite
-```
-
-Jika ingin memakai database lain, ubah konfigurasi `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD` di file `.env`, lalu jalankan ulang migration.
+- Jangan commit `.env` berisi credential asli.
+- `.env.example` hanya berisi placeholder Mailtrap.
+- OTP email disimpan sebagai hash di database, bukan plain text.
+- Untuk production, ganti Mailtrap sandbox dengan provider email produksi.
