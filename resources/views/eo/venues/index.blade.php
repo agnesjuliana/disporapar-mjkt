@@ -62,7 +62,12 @@
 
                 <div class="card group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                     <div class="relative w-full h-36 rounded-xl overflow-hidden mb-4 bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-                        <i data-lucide="building-2" class="w-10 h-10 text-slate-300"></i>
+                        @if ($venue->image_url)
+                            <img src="{{ $venue->image_url }}" alt="Foto {{ $venue->name }}" class="absolute inset-0 w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/10"></div>
+                        @else
+                            <i data-lucide="building-2" class="w-10 h-10 text-slate-300"></i>
+                        @endif
                         <div class="absolute top-2 right-2">
                             <span class="badge {{ $availabilityClass }} shadow flex items-center gap-1">
                                 <i data-lucide="{{ $availabilityIcon }}" class="w-3 h-3"></i>

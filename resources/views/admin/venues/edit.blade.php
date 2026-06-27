@@ -10,7 +10,7 @@
 
     <div class="max-w-3xl">
         <div class="card">
-            <form method="POST" action="{{ route('admin.venues.update', $venue) }}">
+            <form method="POST" action="{{ route('admin.venues.update', $venue) }}" enctype="multipart/form-data">
                 @include('admin.venues._form', ['venue' => $venue])
             </form>
         </div>

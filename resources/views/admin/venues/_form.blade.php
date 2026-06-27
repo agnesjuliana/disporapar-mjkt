@@ -22,6 +22,18 @@
         @error('address') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
     </div>
 
+    <div>
+        <label class="form-label" for="image">Foto Venue</label>
+        @if ($isEdit && $venue->image_url)
+            <img src="{{ $venue->image_url }}" alt="Foto {{ $venue->name }}" class="w-full h-44 object-cover rounded-xl mb-3 border border-slate-200 dark:border-slate-700">
+        @endif
+        <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp" class="form-input">
+        <p class="mt-1 text-xs text-slate-500 dark:text-orange-100/70">
+            Format JPG, PNG, atau WEBP. Maksimal 2 MB{{ $isEdit && ($venue->image_url ?? null) ? '. Kosongkan jika tidak ingin mengganti foto.' : '.' }}
+        </p>
+        @error('image') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label class="form-label" for="capacity">Kapasitas (orang) <span class="text-red-500">*</span></label>

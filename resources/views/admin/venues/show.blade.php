@@ -18,6 +18,17 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 card">
+            <div class="relative w-full h-64 rounded-xl overflow-hidden mb-6 bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                @if ($venue->image_url)
+                    <img src="{{ $venue->image_url }}" alt="Foto {{ $venue->name }}" class="absolute inset-0 w-full h-full object-cover">
+                @else
+                    <div class="text-center text-slate-400">
+                        <i data-lucide="building-2" class="w-12 h-12 mx-auto mb-2"></i>
+                        <p class="text-sm">Belum ada foto venue</p>
+                    </div>
+                @endif
+            </div>
+
             <dl class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Nama Venue</dt>

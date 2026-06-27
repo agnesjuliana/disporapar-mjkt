@@ -11,7 +11,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-5xl">
         <div class="lg:col-span-2">
             <div class="card">
-                <form method="POST" action="{{ route('admin.venues.store') }}">
+                <form method="POST" action="{{ route('admin.venues.store') }}" enctype="multipart/form-data">
                     @include('admin.venues._form')
                 </form>
             </div>

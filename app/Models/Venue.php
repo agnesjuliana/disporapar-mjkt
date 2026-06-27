@@ -20,6 +20,7 @@ class Venue extends Model
         'address',
         'capacity',
         'description',
+        'image_url',
         'lowest_price',
         'highest_price',
         'available_from',

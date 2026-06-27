@@ -8,6 +8,26 @@
         </div>
     </div>
 
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-5">
+        @foreach ([
+            ['label' => 'Total Booking', 'value' => $stats['total'], 'icon' => 'calendar-check', 'iconClass' => 'bg-orange-50 text-[#9f1239] dark:bg-orange-100 dark:text-[#9f1239]'],
+            ['label' => 'Menunggu', 'value' => $stats['pending'], 'icon' => 'clock', 'iconClass' => 'bg-amber-50 text-amber-700 dark:bg-amber-100 dark:text-amber-800'],
+            ['label' => 'Disetujui', 'value' => $stats['approved'], 'icon' => 'check-circle', 'iconClass' => 'bg-teal-50 text-teal-700 dark:bg-teal-100 dark:text-teal-800'],
+            ['label' => 'Ditolak', 'value' => $stats['rejected'], 'icon' => 'x-circle', 'iconClass' => 'bg-red-50 text-red-700 dark:bg-red-100 dark:text-red-800'],
+            ['label' => 'Dibatalkan', 'value' => $stats['cancelled'], 'icon' => 'ban', 'iconClass' => 'bg-stone-100 text-stone-700 dark:bg-stone-100 dark:text-stone-800'],
+        ] as $stat)
+            <div class="card p-4 min-h-[116px] flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl {{ $stat['iconClass'] }} flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs text-slate-500 dark:text-orange-100/75 font-medium leading-snug">{{ $stat['label'] }}</p>
+                    <p class="mt-1 text-3xl font-bold text-slate-900 dark:text-orange-50">{{ number_format($stat['value']) }}</p>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
     <div class="card mb-4 p-4">
         <form method="GET" action="{{ route('admin.venue-bookings.index') }}" class="flex flex-wrap gap-3 items-end">
             <div>
@@ -53,19 +73,19 @@
                             <tr>
                                 <td class="text-slate-400 text-xs">{{ $bookings->firstItem() + $loop->index }}</td>
                                 <td>
-                                    <p class="font-medium text-sm text-slate-800 dark:text-slate-100">{{ $booking->venue?->name ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $booking->venue?->address ?? '-' }}</p>
+                                    <p class="font-medium text-sm text-slate-800 dark:text-orange-50">{{ $booking->venue?->name ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400 dark:text-orange-100/60">{{ $booking->venue?->address ?? '-' }}</p>
                                 </td>
                                 <td>
-                                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ $booking->organizer?->organization_name ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $booking->organizer?->user?->email ?? '' }}</p>
+                                    <p class="text-sm text-slate-600 dark:text-orange-100/85">{{ $booking->organizer?->organization_name ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400 dark:text-orange-100/60">{{ $booking->organizer?->user?->email ?? '' }}</p>
                                 </td>
-                                <td class="text-sm text-slate-500">{{ $booking->event?->name ?? '-' }}</td>
-                                <td class="text-xs text-slate-500 whitespace-nowrap">
+                                <td class="text-sm text-slate-500 dark:text-orange-100/78">{{ $booking->event?->name ?? '-' }}</td>
+                                <td class="text-xs text-slate-500 dark:text-orange-100/80 whitespace-nowrap">
                                     <p>{{ $booking->booking_start?->format('d M Y H:i') }}</p>
-                                    <p class="text-slate-400">s/d {{ $booking->booking_end?->format('d M Y H:i') }}</p>
+                                    <p class="text-slate-400 dark:text-orange-100/60">s/d {{ $booking->booking_end?->format('d M Y H:i') }}</p>
                                 </td>
-                                <td class="text-xs text-slate-500 whitespace-nowrap">{{ $booking->requested_at?->format('d M Y H:i') }}</td>
+                                <td class="text-xs text-slate-500 dark:text-orange-100/78 whitespace-nowrap">{{ $booking->requested_at?->format('d M Y H:i') }}</td>
                                 <td><x-ui.status-badge :status="$booking->status" /></td>
                                 <td>
                                     <div class="flex gap-1">

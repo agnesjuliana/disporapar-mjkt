@@ -16,6 +16,14 @@ class VenueBookingController extends Controller
     {
         $status = $request->string('status')->toString();
 
+        $stats = [
+            'total' => VenueBooking::query()->count(),
+            'pending' => VenueBooking::query()->where('status', 'PENDING')->count(),
+            'approved' => VenueBooking::query()->where('status', 'APPROVED')->count(),
+            'rejected' => VenueBooking::query()->where('status', 'REJECTED')->count(),
+            'cancelled' => VenueBooking::query()->where('status', 'CANCELLED')->count(),
+        ];
+
         $bookings = VenueBooking::query()
             ->with(['venue', 'organizer.user', 'event'])
             ->when($status, fn ($query) => $query->where('status', $status))
@@ -26,6 +34,7 @@ class VenueBookingController extends Controller
         return view('admin.venue-bookings.index', [
             'bookings' => $bookings,
             'status' => $status,
+            'stats' => $stats,
         ]);
     }
 
