@@ -16,8 +16,10 @@ class EventSlot extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'event_id',
         'slot_number',
+        'slot_label',
         'date_start',
         'date_end',
         'slot_width',
@@ -32,8 +34,8 @@ class EventSlot extends Model
             'slot_number' => 'integer',
             'date_start' => 'datetime',
             'date_end' => 'datetime',
-            'slot_width' => 'integer',
-            'slot_long' => 'integer',
+            'slot_width' => 'float',
+            'slot_long' => 'float',
             'price' => 'decimal:2',
             'is_booked' => 'boolean',
         ];

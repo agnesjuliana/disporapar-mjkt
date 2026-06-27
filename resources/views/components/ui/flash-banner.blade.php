@@ -1,6 +1,6 @@
 @props([
     'type' => session('status') ? 'success' : 'error',
-    'message' => session('status') ?? $errors->first(),
+    'message' => session('status') ?? session('error') ?? $errors->first(),
 ])
 
 @if ($message)

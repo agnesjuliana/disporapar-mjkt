@@ -1,6 +1,7 @@
 @props([
     'role' => 'TENANT',
     'currentPage' => '',
+    'activeEventId' => null,
 ])
 
 @php
@@ -34,8 +35,9 @@
                 <span class="nav-label">{{ $item['label'] }}</span>
             </a>
 
-            @foreach ($item['children'] ?? [] as $child)
-                <a href="{{ url($child['href']) }}" class="nav-item ml-5 py-2 text-xs {{ $currentPage === $child['page'] ? 'active' : '' }}">
+            @foreach (($roleValue === 'EVENT_ORGANIZER' && $item['page'] === 'events' && blank($activeEventId)) ? [] : ($item['children'] ?? []) as $child)
+                @php($childHref = str_replace('{event}', (string) $activeEventId, $child['href']))
+                <a href="{{ url($childHref) }}" class="nav-item ml-5 py-2 text-xs {{ $currentPage === $child['page'] ? 'active' : '' }}">
                     <i data-lucide="{{ $child['icon'] }}" class="nav-icon"></i>
                     <span class="nav-label">{{ $child['label'] }}</span>
                 </a>

@@ -1,4 +1,4 @@
-<x-layouts.app :title="$event->name" current-page="events" role="EVENT_ORGANIZER">
+<x-layouts.app :title="$event->name" current-page="events" role="EVENT_ORGANIZER" :active-event-id="$event->id">
     <x-ui.flash-banner />
 
     <div class="mb-5 flex items-center gap-2">
@@ -46,7 +46,7 @@
                         Edit & Ajukan Ulang
                     </a>
                 @elseif ($event->status === 'APPROVED')
-                    <a href="{{ url('/event-slots?event_id='.$event->id) }}" class="w-full btn btn-primary btn-sm justify-center">
+                    <a href="{{ route('eo.events.slots.index', $event) }}" class="w-full btn btn-primary btn-sm justify-center">
                         <i data-lucide="grid" class="w-4 h-4"></i>
                         Kelola Slot
                     </a>
@@ -93,7 +93,7 @@
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="font-semibold text-sm">Slot</h3>
                     @if ($event->status === 'APPROVED')
-                        <a href="{{ url('/event-slots?event_id='.$event->id) }}" class="text-xs text-emerald-500 hover:underline">Kelola</a>
+                        <a href="{{ route('eo.events.slots.index', $event) }}" class="text-xs text-emerald-500 hover:underline">Kelola</a>
                     @endif
                 </div>
                 <div class="flex items-end gap-4 mb-2">
@@ -169,7 +169,7 @@
                 <div class="card">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="font-semibold">Peta Slot</h3>
-                        <a href="{{ url('/event-slots?event_id='.$event->id) }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('eo.events.slots.index', $event) }}" class="btn btn-secondary btn-sm">
                             <i data-lucide="grid" class="w-4 h-4"></i>
                             Kelola Slot
                         </a>

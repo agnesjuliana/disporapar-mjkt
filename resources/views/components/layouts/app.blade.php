@@ -2,6 +2,7 @@
     'title' => 'Dashboard',
     'currentPage' => '',
     'role' => null,
+    'activeEventId' => null,
 ])
 
 @php
@@ -125,7 +126,7 @@
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 antialiased">
     <div id="toast-container"></div>
 
-    <x-layouts.sidebar :role="$resolvedRole" :current-page="$currentPage" />
+    <x-layouts.sidebar :role="$resolvedRole" :current-page="$currentPage" :active-event-id="$activeEventId" />
     <x-layouts.header :title="$title" :role="$resolvedRole" />
 
     <div class="flex h-screen overflow-hidden">

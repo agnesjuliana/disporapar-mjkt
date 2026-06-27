@@ -90,6 +90,11 @@
                                         <a href="{{ route('eo.events.show', $event) }}" class="btn btn-ghost btn-sm btn-icon" title="Lihat">
                                             <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                         </a>
+                                        @if (in_array($event->status, ['APPROVED', 'ONGOING'], true))
+                                            <a href="{{ route('eo.events.slots.index', $event) }}" class="btn btn-ghost btn-sm btn-icon text-indigo-500" title="Kelola Slot">
+                                                <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                                            </a>
+                                        @endif
                                         @if (in_array($event->status, ['DRAFT', 'REJECTED'], true))
                                             <a href="{{ route('eo.events.edit', $event) }}" class="btn btn-ghost btn-sm btn-icon" title="Edit">
                                                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
@@ -117,4 +122,3 @@
         </div>
     @endif
 </x-layouts.app>
-

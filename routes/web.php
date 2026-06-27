@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EoEventController;
+use App\Http\Controllers\EoEventSlotController;
 use App\Http\Controllers\EoVenueBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventOrganizerController;
@@ -66,6 +67,10 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:ADMIN');
 
     Route::middleware('role:EVENT_ORGANIZER')->group(function () {
+        Route::get('/eo/events/{event}/slots', [EoEventSlotController::class, 'index'])->name('eo.events.slots.index');
+        Route::post('/eo/events/{event}/slots', [EoEventSlotController::class, 'store'])->name('eo.events.slots.store');
+        Route::patch('/eo/events/{event}/slots/{eventSlot}', [EoEventSlotController::class, 'update'])->name('eo.events.slots.update');
+        Route::delete('/eo/events/{event}/slots/{eventSlot}', [EoEventSlotController::class, 'destroy'])->name('eo.events.slots.destroy');
         Route::post('/eo/events/{event}/submit', [EoEventController::class, 'submit'])->name('eo.events.submit');
         Route::post('/eo/events/{event}/cancel', [EoEventController::class, 'cancel'])->name('eo.events.cancel');
         Route::resource('/eo/events', EoEventController::class)
