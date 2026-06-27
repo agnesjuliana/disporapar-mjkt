@@ -17,6 +17,7 @@ class ParticipantRegistration extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'event_id',
         'user_id',
         'registered_at',

@@ -5,9 +5,11 @@ use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EoEventController;
 use App\Http\Controllers\EoEventSlotController;
+use App\Http\Controllers\EoParticipantRegistrationController;
 use App\Http\Controllers\EoTenantRegistrationController;
 use App\Http\Controllers\EoVenueBookingController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventCalendarController;
 use App\Http\Controllers\EventOrganizerController;
 use App\Http\Controllers\EventRegistrationController;
 use App\Http\Controllers\EventSlotController;
@@ -41,6 +43,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/calendar', [EventCalendarController::class, 'index'])->name('event.calendar');
     Route::get('/dashboard/{page}', [DashboardController::class, 'placeholder'])->name('dashboard.placeholder');
 
     Route::resource('admin/venues', VenueController::class)
@@ -68,6 +71,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:ADMIN');
 
     Route::middleware('role:EVENT_ORGANIZER')->group(function () {
+        Route::get('/eo/events/{event}/visitors', [EoParticipantRegistrationController::class, 'index'])->name('eo.events.visitors.index');
         Route::get('/eo/events/{event}/tenant-registrations', [EoTenantRegistrationController::class, 'index'])->name('eo.events.tenant-registrations.index');
         Route::get('/eo/events/{event}/tenant-registrations/{registration}', [EoTenantRegistrationController::class, 'show'])->name('eo.events.tenant-registrations.show');
         Route::post('/eo/events/{event}/tenant-registrations/{registration}/approve', [EoTenantRegistrationController::class, 'approve'])->name('eo.events.tenant-registrations.approve');
@@ -104,4 +108,6 @@ Route::resource('event-registrations', EventRegistrationController::class)
 Route::resource('registration-documents', RegistrationDocumentController::class);
 Route::resource('registration-slots', RegistrationSlotController::class);
 Route::resource('registration-attendances', RegistrationAttendanceController::class);
-Route::resource('participant-registrations', ParticipantRegistrationController::class);
+Route::resource('participant-registrations', ParticipantRegistrationController::class)
+    ->only(['index', 'create', 'store', 'show'])
+    ->middleware(['auth', 'role:MASYARAKAT']);
