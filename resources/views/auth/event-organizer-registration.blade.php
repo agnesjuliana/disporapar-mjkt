@@ -1,6 +1,6 @@
 <x-layouts.auth title="Daftar Event Organizer">
     <div class="absolute inset-0 opacity-[0.03]"
-         style="background-image:linear-gradient(#6366f1 1px,transparent 1px),linear-gradient(90deg,#6366f1 1px,transparent 1px);background-size:40px 40px"></div>
+         style="background-image:linear-gradient(#c2410c 1px,transparent 1px),linear-gradient(90deg,#c2410c 1px,transparent 1px);background-size:40px 40px"></div>
 
     <div class="relative z-10 w-full max-w-lg fade-in">
         <div class="text-center mb-6">

@@ -13,10 +13,10 @@
     $footerRole = $config['label'];
 @endphp
 
-<aside id="sidebar" class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-950 flex flex-col overflow-hidden border-r border-slate-800 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+<aside id="sidebar" class="fixed left-0 top-0 h-full w-64 z-40 flex flex-col overflow-hidden border-r -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="flex items-center gap-3 px-4 h-16 border-b border-slate-800 flex-shrink-0">
-        <div class="sidebar-logo-icon w-9 h-9 rounded-xl {{ $config['color'] }} flex items-center justify-center flex-shrink-0">
-            <i data-lucide="{{ $config['icon'] }}" class="w-5 h-5 text-white"></i>
+        <div class="sidebar-logo-icon w-9 h-9 rounded-xl bg-white/90 text-[#9f1239] shadow-sm ring-1 ring-white/50 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="{{ $config['icon'] }}" class="w-5 h-5"></i>
         </div>
         <div class="sidebar-logo-text overflow-hidden">
             <div class="text-white font-bold text-sm leading-tight">{{ config('app.name', 'WARTA WILWATIKTA') }}</div>
@@ -47,7 +47,7 @@
 
     <div class="border-t border-slate-800 px-3 py-3 flex-shrink-0">
         <div class="flex items-center gap-3 px-1">
-            <div class="w-8 h-8 rounded-full {{ $config['color'] }} flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+            <div class="w-8 h-8 rounded-full bg-white/90 text-[#9f1239] ring-1 ring-white/50 flex items-center justify-center font-bold text-sm flex-shrink-0">
                 {{ strtoupper(substr($user?->name ?? $config['fallbackInitial'], 0, 1)) }}
             </div>
             <div class="sidebar-logo-text overflow-hidden">

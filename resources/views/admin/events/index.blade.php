@@ -8,20 +8,20 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
         @foreach ([
-            ['label' => 'Total Event', 'value' => $stats['total'], 'icon' => 'calendar', 'color' => 'indigo'],
-            ['label' => 'Menunggu Persetujuan', 'value' => $stats['pending'], 'icon' => 'clock', 'color' => 'yellow'],
-            ['label' => 'Disetujui', 'value' => $stats['approved'], 'icon' => 'check-circle', 'color' => 'green'],
-            ['label' => 'Sedang Berlangsung', 'value' => $stats['ongoing'], 'icon' => 'zap', 'color' => 'purple'],
+            ['label' => 'Total Event', 'value' => $stats['total'], 'icon' => 'calendar', 'iconClass' => 'bg-orange-50 text-[#9f1239] dark:bg-orange-100 dark:text-[#9f1239]'],
+            ['label' => 'Menunggu Persetujuan', 'value' => $stats['pending'], 'icon' => 'clock', 'iconClass' => 'bg-amber-50 text-amber-700 dark:bg-amber-100 dark:text-amber-800'],
+            ['label' => 'Disetujui', 'value' => $stats['approved'], 'icon' => 'check-circle', 'iconClass' => 'bg-teal-50 text-teal-700 dark:bg-teal-100 dark:text-teal-800'],
+            ['label' => 'Sedang Berlangsung', 'value' => $stats['ongoing'], 'icon' => 'zap', 'iconClass' => 'bg-rose-50 text-rose-700 dark:bg-rose-100 dark:text-rose-800'],
         ] as $stat)
-            <div class="stat-card">
-                <div class="stat-icon bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900/30">
-                    <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5 text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-400"></i>
+            <div class="card p-4 min-h-[116px] flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl {{ $stat['iconClass'] }} flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5"></i>
                 </div>
-                <div>
-                    <p class="text-xs text-slate-500 font-medium">{{ $stat['label'] }}</p>
-                    <p class="text-2xl font-bold text-slate-800 dark:text-slate-100">{{ number_format($stat['value']) }}</p>
+                <div class="min-w-0">
+                    <p class="text-xs text-slate-500 dark:text-orange-100/75 font-medium leading-snug">{{ $stat['label'] }}</p>
+                    <p class="mt-1 text-3xl font-bold text-slate-900 dark:text-orange-50">{{ number_format($stat['value']) }}</p>
                 </div>
             </div>
         @endforeach
@@ -89,26 +89,26 @@
                             <tr>
                                 <td class="text-slate-400 text-xs">{{ $events->firstItem() + $loop->index }}</td>
                                 <td>
-                                    <a href="{{ route('admin.events.show', $event) }}" class="font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+                                    <a href="{{ route('admin.events.show', $event) }}" class="font-medium text-[#9f1239] dark:text-orange-200 hover:underline">
                                         {{ str($event->name)->limit(40) }}
                                     </a>
-                                    <p class="text-xs text-slate-400 mt-0.5">{{ $event->venue_type === 'EXTERNAL' ? 'Venue Eksternal' : 'Venue Internal' }}</p>
+                                    <p class="text-xs text-slate-400 dark:text-orange-100/65 mt-0.5">{{ $event->venue_type === 'EXTERNAL' ? 'Venue Eksternal' : 'Venue Internal' }}</p>
                                 </td>
                                 <td>
-                                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ $event->organizer?->organization_name ?? '-' }}</p>
-                                    <p class="text-xs text-slate-400">{{ $event->organizer?->user?->email ?? '' }}</p>
+                                    <p class="text-sm text-slate-600 dark:text-orange-100/85">{{ $event->organizer?->organization_name ?? '-' }}</p>
+                                    <p class="text-xs text-slate-400 dark:text-orange-100/60">{{ $event->organizer?->user?->email ?? '' }}</p>
                                 </td>
-                                <td class="text-xs text-slate-500 whitespace-nowrap">
+                                <td class="text-xs text-slate-500 dark:text-orange-100/80 whitespace-nowrap">
                                     <p>{{ $event->event_start?->format('d M Y H:i') }}</p>
-                                    <p class="text-slate-400">s/d {{ $event->event_end?->format('d M Y H:i') }}</p>
+                                    <p class="text-slate-400 dark:text-orange-100/60">s/d {{ $event->event_end?->format('d M Y H:i') }}</p>
                                 </td>
-                                <td class="text-sm text-slate-500 max-w-36 truncate">{{ $venueName ?? '-' }}</td>
+                                <td class="text-sm text-slate-500 dark:text-orange-100/78 max-w-36 truncate">{{ $venueName ?? '-' }}</td>
                                 <td>
                                     <div class="flex items-center gap-1.5">
                                         <div class="text-xs font-medium">{{ $slotBooked }}/{{ $slotTotal }}</div>
                                         @if ($slotTotal > 0)
-                                            <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                                <div class="h-full bg-indigo-500 rounded-full" style="width: {{ $slotPercent }}%"></div>
+                                            <div class="w-12 h-1.5 bg-slate-200 dark:bg-[#3a211f] rounded-full overflow-hidden">
+                                                <div class="h-full bg-[#9f1239] dark:bg-orange-300 rounded-full" style="width: {{ $slotPercent }}%"></div>
                                             </div>
                                         @endif
                                     </div>

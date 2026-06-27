@@ -13,9 +13,9 @@
                 Halo {{ $user->name }}, gunakan kode OTP berikut untuk memverifikasi email akun Disporapar Anda.
             </p>
 
-            <div style="background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;text-align:center;padding:20px;margin:20px 0">
+            <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;text-align:center;padding:20px;margin:20px 0">
                 <p style="margin:0 0 8px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.08em">Kode OTP</p>
-                <p style="margin:0;font-size:34px;letter-spacing:.22em;font-weight:700;color:#4f46e5">{{ $otp }}</p>
+                <p style="margin:0;font-size:34px;letter-spacing:.22em;font-weight:700;color:#9f1239">{{ $otp }}</p>
             </div>
 
             <p style="margin:0;color:#475569;font-size:14px;line-height:1.6">

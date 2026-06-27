@@ -46,6 +46,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
     Route::get('/dashboard/calendar', [EventCalendarController::class, 'index'])->name('event.calendar');
     Route::get('/dashboard/{page}', [DashboardController::class, 'placeholder'])->name('dashboard.placeholder');
 
@@ -72,6 +73,8 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'show', 'destroy'])
         ->names('admin.events')
         ->middleware('role:ADMIN');
+    Route::resource('users', UserController::class)
+        ->middleware('role:ADMIN');
 
     Route::middleware('role:EVENT_ORGANIZER')->group(function () {
         Route::get('/eo/events/{event}/visitors', [EoParticipantRegistrationController::class, 'index'])->name('eo.events.visitors.index');
@@ -95,7 +98,6 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::resource('users', UserController::class);
 Route::resource('tenants', TenantController::class);
 Route::resource('event-organizers', EventOrganizerController::class);
 Route::resource('events', EventController::class)

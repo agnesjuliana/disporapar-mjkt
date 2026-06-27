@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin@disporapar.test',
                 'password_hash' => 'password',
                 'role' => 'ADMIN',
-                'status' => 'ADMIN',
+                'status' => 'ACTIVE',
                 'is_verified' => true,
             ],
             [
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
                 'email' => 'organizer@disporapar.test',
                 'password_hash' => 'password',
                 'role' => 'EVENT_ORGANIZER',
-                'status' => 'EVENT_ORGANIZER',
+                'status' => 'ACTIVE',
                 'is_verified' => true,
             ],
             [
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
                 'email' => 'tenant@disporapar.test',
                 'password_hash' => 'password',
                 'role' => 'TENANT',
-                'status' => 'TENANT',
+                'status' => 'ACTIVE',
                 'is_verified' => true,
             ],
             [
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
                 'email' => 'masyarakat@disporapar.test',
                 'password_hash' => 'password',
                 'role' => 'MASYARAKAT',
-                'status' => 'MASYARAKAT',
+                'status' => 'ACTIVE',
                 'is_verified' => true,
             ],
         ];

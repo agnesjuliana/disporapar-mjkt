@@ -81,7 +81,7 @@
     <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
             <h3 class="font-semibold text-slate-900 dark:text-white">Event pada {{ $selectedDate->translatedFormat('d F Y') }}</h3>
-            <p class="text-sm text-slate-500">{{ $events->total() }} event ditemukan{{ $search ? ' untuk "'.$search.'"' : '' }}.</p>
+            <p class="text-sm text-slate-500 dark:text-orange-100/75">{{ $events->total() }} event ditemukan{{ $search ? ' untuk "'.$search.'"' : '' }}.</p>
         </div>
         <a href="{{ route('event.calendar', ['date' => today()->format('Y-m-d'), 'month' => today()->format('Y-m')]) }}" class="btn btn-secondary btn-sm">
             <i data-lucide="calendar-days" class="w-4 h-4"></i>
@@ -119,18 +119,18 @@
                         </div>
                     </div>
                     <div class="p-4 space-y-3">
-                        <p class="text-sm text-slate-500 line-clamp-2">{{ $event->description }}</p>
-                        <div class="space-y-2 text-xs text-slate-500">
+                        <p class="text-sm text-slate-500 dark:text-orange-100/78 line-clamp-2">{{ $event->description }}</p>
+                        <div class="space-y-2 text-xs text-slate-500 dark:text-orange-100/70">
                             <div class="flex items-center gap-2">
-                                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400 dark:text-orange-200/70"></i>
                                 <span>{{ $event->event_start?->format('d M Y H:i') }} - {{ $event->event_end?->format('d M Y H:i') }}</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i>
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400 dark:text-orange-200/70"></i>
                                 <span class="truncate">{{ $venueName ?? 'Venue TBD' }}</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                                <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400 dark:text-orange-200/70"></i>
                                 <span class="truncate">{{ $event->organizer?->organization_name ?? 'Disporapar' }}</span>
                             </div>
                         </div>

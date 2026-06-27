@@ -21,7 +21,7 @@
     };
 @endphp
 
-<header class="fixed top-0 right-0 left-0 lg:left-64 z-30 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-16 flex items-center px-4 gap-3 transition-all duration-200" id="main-header">
+<header class="fixed top-0 right-0 left-0 lg:left-64 z-30 bg-white dark:bg-[#241417] border-b border-slate-200 dark:border-[#56312a] h-16 flex items-center px-4 gap-3 transition-all duration-200" id="main-header">
     <button onclick="document.getElementById('sidebar')?.classList.toggle('collapsed')" class="lg:hidden btn btn-ghost btn-icon mr-1">
         <i data-lucide="menu" class="w-5 h-5"></i>
     </button>
@@ -54,31 +54,25 @@
         <div class="relative">
             <button type="button"
                     onclick="this.parentElement.querySelector('[data-dropdown]').classList.toggle('hidden')"
-                    class="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                    class="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b1a1c] transition-colors">
                 <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                     {{ strtoupper(substr($user?->name ?? 'U', 0, 1)) }}
                 </div>
                 <div class="hidden sm:block text-left">
-                    <div class="text-sm font-semibold text-slate-700 dark:text-slate-200 leading-tight max-w-[140px] truncate">
+                    <div class="text-sm font-semibold text-slate-700 dark:text-orange-50 leading-tight max-w-[140px] truncate">
                         {{ $user?->name ?? 'User' }}
                     </div>
-                    <div class="text-xs text-slate-400">{{ $roleLabels[$roleValue] ?? $roleValue }}</div>
+                    <div class="text-xs text-slate-400 dark:text-orange-200/60">{{ $roleLabels[$roleValue] ?? $roleValue }}</div>
                 </div>
                 <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 ml-0.5"></i>
             </button>
 
-            <div data-dropdown class="hidden absolute right-0 top-full mt-1 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-1 z-50">
-                <a href="{{ url($rolePrefix . '/profile') }}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+            <div data-dropdown class="hidden absolute right-0 top-full mt-1 w-48 bg-white dark:bg-[#241417] border border-slate-200 dark:border-[#56312a] rounded-xl shadow-xl py-1 z-50">
+                <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 dark:text-orange-100 hover:bg-slate-50 dark:hover:bg-[#2b1a1c]">
                     <i data-lucide="user" class="w-4 h-4"></i> Profil
                 </a>
 
-                @if ($roleValue === 'ADMIN')
-                    <a href="{{ url('admin/settings') }}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
-                        <i data-lucide="settings" class="w-4 h-4"></i> Pengaturan
-                    </a>
-                @endif
-
-                <hr class="my-1 border-slate-100 dark:border-slate-700">
+                <hr class="my-1 border-slate-100 dark:border-[#56312a]">
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

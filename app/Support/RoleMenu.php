@@ -15,8 +15,8 @@ class RoleMenu
                 'label' => 'Admin',
                 'subtitle' => 'Admin Panel',
                 'icon' => 'zap',
-                'color' => 'bg-indigo-500',
-                'accent' => 'indigo',
+                'color' => 'bg-[#9f1239]',
+                'accent' => 'mojo-red',
                 'fallbackInitial' => 'A',
                 'items' => [
                     ['icon' => 'home', 'label' => 'Home', 'page' => 'home', 'href' => '/dashboard', 'description' => 'Ringkasan profil dan pintasan menu admin.'],
@@ -32,8 +32,8 @@ class RoleMenu
                 'label' => 'Event Organizer',
                 'subtitle' => 'Portal Event Organizer',
                 'icon' => 'calendar-range',
-                'color' => 'bg-emerald-500',
-                'accent' => 'emerald',
+                'color' => 'bg-[#0f766e]',
+                'accent' => 'mojo-teal',
                 'fallbackInitial' => 'E',
                 'items' => [
                     ['icon' => 'home', 'label' => 'Home', 'page' => 'home', 'href' => '/dashboard', 'description' => 'Ringkasan profil dan pintasan menu event organizer.'],
@@ -60,8 +60,8 @@ class RoleMenu
                 'label' => 'Masyarakat',
                 'subtitle' => 'Portal Masyarakat',
                 'icon' => 'users',
-                'color' => 'bg-indigo-500',
-                'accent' => 'indigo',
+                'color' => 'bg-[#d97706]',
+                'accent' => 'mojo-gold',
                 'fallbackInitial' => 'M',
                 'items' => [
                     ['icon' => 'home', 'label' => 'Home', 'page' => 'home', 'href' => '/dashboard', 'description' => 'Ringkasan profil dan pintasan menu masyarakat.'],
@@ -74,8 +74,8 @@ class RoleMenu
                 'label' => 'Tenant UMKM',
                 'subtitle' => 'Portal Tenant UMKM',
                 'icon' => 'store',
-                'color' => 'bg-orange-500',
-                'accent' => 'orange',
+                'color' => 'bg-[#c2410c]',
+                'accent' => 'mojo-terracotta',
                 'fallbackInitial' => 'T',
                 'items' => [
                     ['icon' => 'home', 'label' => 'Home', 'page' => 'home', 'href' => '/dashboard', 'description' => 'Ringkasan profil dan pintasan menu tenant UMKM.'],

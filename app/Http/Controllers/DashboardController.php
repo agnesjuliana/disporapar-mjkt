@@ -19,6 +19,17 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function profile(Request $request): View
+    {
+        $user = $request->user()?->load(['tenant', 'eventOrganizer']);
+        $menu = RoleMenu::for($user?->role);
+
+        return view('dashboard.profile', [
+            'user' => $user,
+            'menu' => $menu,
+        ]);
+    }
+
     public function placeholder(Request $request, string $page): View
     {
         $user = $request->user();

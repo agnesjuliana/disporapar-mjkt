@@ -1,10 +1,10 @@
 <x-layouts.auth title="Pilih Role">
     <div class="absolute inset-0 opacity-[0.03]"
-         style="background-image:linear-gradient(#6366f1 1px,transparent 1px),linear-gradient(90deg,#6366f1 1px,transparent 1px);background-size:40px 40px"></div>
+         style="background-image:linear-gradient(#c2410c 1px,transparent 1px),linear-gradient(90deg,#c2410c 1px,transparent 1px);background-size:40px 40px"></div>
 
     <div class="relative z-10 w-full max-w-4xl fade-in">
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 mb-4 shadow-lg shadow-indigo-500/30">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 mb-4 shadow-lg shadow-orange-700/30">
                 <i data-lucide="user-plus" class="w-7 h-7 text-white"></i>
             </div>
             <h1 class="text-2xl font-bold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</h1>

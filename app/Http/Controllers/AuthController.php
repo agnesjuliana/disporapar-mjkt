@@ -52,6 +52,16 @@ class AuthController extends Controller
                 ->with('status', 'Email belum diverifikasi. Kode OTP baru telah dikirim.');
         }
 
+        if ($user->status !== 'ACTIVE') {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()
+                ->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi admin.'])
+                ->onlyInput('email');
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard'));
@@ -85,7 +95,7 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password_hash' => $validated['password'],
             'role' => 'MASYARAKAT',
-            'status' => 'MASYARAKAT',
+            'status' => 'ACTIVE',
             'is_verified' => false,
         ]);
 
@@ -123,7 +133,7 @@ class AuthController extends Controller
                 'email' => $validated['email'],
                 'password_hash' => $validated['password'],
                 'role' => 'TENANT',
-                'status' => 'TENANT',
+                'status' => 'ACTIVE',
                 'is_verified' => false,
             ]);
 
@@ -175,7 +185,7 @@ class AuthController extends Controller
                 'email' => $validated['email'],
                 'password_hash' => $validated['password'],
                 'role' => 'EVENT_ORGANIZER',
-                'status' => 'EVENT_ORGANIZER',
+                'status' => 'ACTIVE',
                 'is_verified' => false,
             ]);
 

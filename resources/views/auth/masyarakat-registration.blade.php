@@ -1,10 +1,10 @@
 <x-layouts.auth title="Daftar Masyarakat">
     <div class="absolute inset-0 opacity-[0.03]"
-         style="background-image:linear-gradient(#6366f1 1px,transparent 1px),linear-gradient(90deg,#6366f1 1px,transparent 1px);background-size:40px 40px"></div>
+         style="background-image:linear-gradient(#c2410c 1px,transparent 1px),linear-gradient(90deg,#c2410c 1px,transparent 1px);background-size:40px 40px"></div>
 
     <div class="relative z-10 w-full max-w-md fade-in">
         <div class="text-center mb-6">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600 mb-3 shadow-lg shadow-indigo-500/30">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600 mb-3 shadow-lg shadow-orange-700/30">
                 <i data-lucide="users" class="w-6 h-6 text-white"></i>
             </div>
             <h1 class="text-xl font-bold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</h1>
@@ -73,7 +73,7 @@
 
                 <button type="submit" id="masyarakat-btn"
                         class="w-full btn py-2.5 justify-center text-sm font-semibold text-white"
-                        style="background:linear-gradient(135deg,#6366f1,#4f46e5);box-shadow:0 4px 15px rgba(99,102,241,.3)">
+                        style="background:linear-gradient(135deg,#c2410c,#9f1239);box-shadow:0 4px 15px rgba(159,18,57,.28)">
                     <i data-lucide="user-plus" class="w-4 h-4"></i>
                     Buat Akun Masyarakat
                 </button>
