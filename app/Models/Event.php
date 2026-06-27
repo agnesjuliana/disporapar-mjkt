@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,7 @@ class Event extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'name',
         'description',
         'organizer_id',
@@ -26,11 +28,14 @@ class Event extends Model
         'external_venue_capacity',
         'event_start',
         'event_end',
+        'registration_deadline',
         'slot_size',
         'capacity',
+        'banner_url',
         'status',
         'approved_by',
         'approved_at',
+        'rejection_reason',
     ];
 
     protected function casts(): array
@@ -39,10 +44,41 @@ class Event extends Model
             'external_venue_capacity' => 'integer',
             'event_start' => 'datetime',
             'event_end' => 'datetime',
+            'registration_deadline' => 'datetime',
             'slot_size' => 'integer',
             'capacity' => 'integer',
             'approved_at' => 'datetime',
         ];
+    }
+
+    public function scopeForOrganizer(Builder $query, string $organizerId): Builder
+    {
+        return $query->where('organizer_id', $organizerId);
+    }
+
+    public function scopeSearch(Builder $query, ?string $search): Builder
+    {
+        return $query->when($search, function (Builder $query) use ($search) {
+            $query->where(function (Builder $query) use ($search) {
+                $query
+                    ->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        });
+    }
+
+    public function scopeStatus(Builder $query, ?string $status): Builder
+    {
+        return $query->when($status, fn (Builder $query) => $query->where('status', $status));
+    }
+
+    public function scopeWithEventCounts(Builder $query): Builder
+    {
+        return $query->withCount([
+            'slots',
+            'slots as booked_slots_count' => fn (Builder $query) => $query->where('is_booked', true),
+            'registrations',
+        ]);
     }
 
     public function organizer(): BelongsTo

@@ -8,7 +8,6 @@ use App\Models\Venue;
 use App\Models\VenueBooking;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class EoVenueBookingController extends Controller
@@ -100,15 +99,12 @@ class EoVenueBookingController extends Controller
             'requested_at' => now(),
         ]);
 
-        return redirect()
-            ->route('eo.venue-booking')
+        return to_route('eo.venue-booking')
             ->with('status', 'Permintaan booking venue berhasil dikirim.');
     }
 
     private function organizerFor(Request $request): EventOrganizer
     {
-        return EventOrganizer::query()
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        return EventOrganizer::forUserOrCreate($request->user());
     }
 }

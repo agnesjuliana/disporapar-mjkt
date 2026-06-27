@@ -94,8 +94,7 @@ class VenueBookingController extends Controller
             'final_price' => $validated['final_price'] ?? null,
         ]);
 
-        return redirect()
-            ->route('admin.venue-bookings.index')
+        return to_route('admin.venue-bookings.index')
             ->with('status', 'Booking venue berhasil disetujui.');
     }
 
@@ -107,8 +106,7 @@ class VenueBookingController extends Controller
             'approved_at' => now(),
         ]);
 
-        return redirect()
-            ->route('admin.venue-bookings.index')
+        return to_route('admin.venue-bookings.index')
             ->with('status', 'Booking venue berhasil ditolak.');
     }
 }

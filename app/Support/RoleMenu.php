@@ -42,7 +42,7 @@ class RoleMenu
                         'icon' => 'calendar-plus',
                         'label' => 'Manajemen Event',
                         'page' => 'events',
-                        'href' => '/events',
+                        'href' => '/eo/events',
                         'description' => 'Buat dan kelola event yang diajukan oleh EO.',
                         'children' => [
                             ['icon' => 'users', 'label' => 'Manajemen Pengunjung', 'page' => 'event-visitors', 'href' => '/participant-registrations', 'description' => 'Kelola pendaftaran dan kehadiran pengunjung.'],

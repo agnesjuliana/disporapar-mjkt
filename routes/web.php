@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EoEventController;
 use App\Http\Controllers\EoVenueBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventOrganizerController;
@@ -54,6 +55,11 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:ADMIN');
 
     Route::middleware('role:EVENT_ORGANIZER')->group(function () {
+        Route::post('/eo/events/{event}/submit', [EoEventController::class, 'submit'])->name('eo.events.submit');
+        Route::post('/eo/events/{event}/cancel', [EoEventController::class, 'cancel'])->name('eo.events.cancel');
+        Route::resource('/eo/events', EoEventController::class)
+            ->names('eo.events')
+            ->except(['destroy']);
         Route::get('/eo/daftar-venue', [EoVenueBookingController::class, 'venues'])->name('eo.daftar-venue');
         Route::get('/eo/venue-booking', [EoVenueBookingController::class, 'bookings'])->name('eo.venue-booking');
         Route::post('/eo/venue-booking', [EoVenueBookingController::class, 'store'])->name('eo.venue-booking.store');
