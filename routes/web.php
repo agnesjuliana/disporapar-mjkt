@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EoEventController;
 use App\Http\Controllers\EoVenueBookingController;
@@ -52,6 +53,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin/venue-bookings', VenueBookingController::class)
         ->only(['index', 'show'])
         ->names('admin.venue-bookings')
+        ->middleware('role:ADMIN');
+    Route::post('admin/events/{event}/approve', [AdminEventController::class, 'approve'])
+        ->name('admin.events.approve')
+        ->middleware('role:ADMIN');
+    Route::post('admin/events/{event}/reject', [AdminEventController::class, 'reject'])
+        ->name('admin.events.reject')
+        ->middleware('role:ADMIN');
+    Route::resource('admin/events', AdminEventController::class)
+        ->only(['index', 'show', 'destroy'])
+        ->names('admin.events')
         ->middleware('role:ADMIN');
 
     Route::middleware('role:EVENT_ORGANIZER')->group(function () {

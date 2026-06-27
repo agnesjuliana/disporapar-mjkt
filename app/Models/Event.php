@@ -62,7 +62,10 @@ class Event extends Model
             $query->where(function (Builder $query) use ($search) {
                 $query
                     ->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('organizer', function (Builder $query) use ($search) {
+                        $query->where('organization_name', 'like', "%{$search}%");
+                    });
             });
         });
     }
