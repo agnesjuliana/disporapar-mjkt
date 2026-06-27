@@ -85,10 +85,16 @@
             <h2 class="page-title mt-1">Slot - {{ $event->name }}</h2>
             <p class="page-subtitle">Atur slot tenant untuk event yang sudah disetujui.</p>
         </div>
-        <button type="button" onclick="openSlotModal()" class="btn btn-primary btn-sm">
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            Tambah Slot
-        </button>
+        <div class="flex flex-wrap gap-2">
+            <a href="{{ route('eo.events.tenant-registrations.index', $event) }}" class="btn btn-secondary btn-sm">
+                <i data-lucide="store" class="w-4 h-4"></i>
+                Manajemen Tenant
+            </a>
+            <button type="button" onclick="openSlotModal()" class="btn btn-primary btn-sm">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Tambah Slot
+            </button>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">

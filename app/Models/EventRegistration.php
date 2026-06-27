@@ -17,6 +17,7 @@ class EventRegistration extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'event_id',
         'tenant_id',
         'registration_status',
@@ -24,6 +25,9 @@ class EventRegistration extends Model
         'approved_by',
         'approved_at',
         'rejection_reason',
+        'notes',
+        'requested_slot_count',
+        'requested_slot_ids',
     ];
 
     protected function casts(): array
@@ -31,6 +35,8 @@ class EventRegistration extends Model
         return [
             'registered_at' => 'datetime',
             'approved_at' => 'datetime',
+            'requested_slot_count' => 'integer',
+            'requested_slot_ids' => 'array',
         ];
     }
 

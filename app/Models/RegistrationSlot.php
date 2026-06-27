@@ -15,6 +15,7 @@ class RegistrationSlot extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'event_registration_id',
         'slot_id',
         'status',

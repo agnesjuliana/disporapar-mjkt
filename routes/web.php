@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EoEventController;
 use App\Http\Controllers\EoEventSlotController;
+use App\Http\Controllers\EoTenantRegistrationController;
 use App\Http\Controllers\EoVenueBookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventOrganizerController;
@@ -67,6 +68,11 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:ADMIN');
 
     Route::middleware('role:EVENT_ORGANIZER')->group(function () {
+        Route::get('/eo/events/{event}/tenant-registrations', [EoTenantRegistrationController::class, 'index'])->name('eo.events.tenant-registrations.index');
+        Route::get('/eo/events/{event}/tenant-registrations/{registration}', [EoTenantRegistrationController::class, 'show'])->name('eo.events.tenant-registrations.show');
+        Route::post('/eo/events/{event}/tenant-registrations/{registration}/approve', [EoTenantRegistrationController::class, 'approve'])->name('eo.events.tenant-registrations.approve');
+        Route::post('/eo/events/{event}/tenant-registrations/{registration}/assign', [EoTenantRegistrationController::class, 'assign'])->name('eo.events.tenant-registrations.assign');
+        Route::post('/eo/events/{event}/tenant-registrations/{registration}/reject', [EoTenantRegistrationController::class, 'reject'])->name('eo.events.tenant-registrations.reject');
         Route::get('/eo/events/{event}/slots', [EoEventSlotController::class, 'index'])->name('eo.events.slots.index');
         Route::post('/eo/events/{event}/slots', [EoEventSlotController::class, 'store'])->name('eo.events.slots.store');
         Route::patch('/eo/events/{event}/slots/{eventSlot}', [EoEventSlotController::class, 'update'])->name('eo.events.slots.update');
@@ -85,9 +91,16 @@ Route::middleware('auth')->group(function () {
 Route::resource('users', UserController::class);
 Route::resource('tenants', TenantController::class);
 Route::resource('event-organizers', EventOrganizerController::class);
-Route::resource('events', EventController::class);
+Route::resource('events', EventController::class)
+    ->only(['index', 'show'])
+    ->middleware(['auth', 'role:TENANT']);
 Route::resource('event-slots', EventSlotController::class);
-Route::resource('event-registrations', EventRegistrationController::class);
+Route::post('event-registrations/{event_registration}/cancel', [EventRegistrationController::class, 'cancel'])
+    ->name('event-registrations.cancel')
+    ->middleware(['auth', 'role:TENANT']);
+Route::resource('event-registrations', EventRegistrationController::class)
+    ->only(['index', 'create', 'store', 'show'])
+    ->middleware(['auth', 'role:TENANT']);
 Route::resource('registration-documents', RegistrationDocumentController::class);
 Route::resource('registration-slots', RegistrationSlotController::class);
 Route::resource('registration-attendances', RegistrationAttendanceController::class);

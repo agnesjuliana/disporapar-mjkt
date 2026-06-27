@@ -50,7 +50,7 @@
                         <i data-lucide="grid" class="w-4 h-4"></i>
                         Kelola Slot
                     </a>
-                    <a href="{{ url('/event-registrations?event_id='.$event->id) }}" class="w-full btn btn-secondary btn-sm justify-center">
+                    <a href="{{ route('eo.events.tenant-registrations.index', $event) }}" class="w-full btn btn-secondary btn-sm justify-center">
                         <i data-lucide="clipboard-list" class="w-4 h-4"></i>
                         Lihat Pendaftaran
                     </a>

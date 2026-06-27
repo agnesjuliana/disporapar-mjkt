@@ -46,7 +46,7 @@ class RoleMenu
                         'description' => 'Buat dan kelola event yang diajukan oleh EO.',
                         'children' => [
                             ['icon' => 'users', 'label' => 'Manajemen Pengunjung', 'page' => 'event-visitors', 'href' => '/participant-registrations?event_id={event}', 'description' => 'Kelola pendaftaran dan kehadiran pengunjung.'],
-                            ['icon' => 'store', 'label' => 'Manajemen Tenant', 'page' => 'event-tenants', 'href' => '/event-registrations?event_id={event}', 'description' => 'Kelola tenant UMKM yang mendaftar ke event.'],
+                            ['icon' => 'store', 'label' => 'Manajemen Tenant', 'page' => 'event-tenants', 'href' => '/eo/events/{event}/tenant-registrations', 'description' => 'Kelola tenant UMKM yang mendaftar ke event.'],
                             ['icon' => 'grid-2x2', 'label' => 'Manajemen Slot', 'page' => 'event-slots', 'href' => '/eo/events/{event}/slots', 'description' => 'Atur slot tenant dalam event.'],
                             ['icon' => 'scan-line', 'label' => 'Absensi Event', 'page' => 'attendance', 'href' => '/registration-attendances?event_id={event}', 'description' => 'Pantau check-in dan kehadiran peserta.'],
                         ],

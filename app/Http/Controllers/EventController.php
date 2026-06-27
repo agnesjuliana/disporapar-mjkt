@@ -3,63 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventRegistration;
+use App\Models\Tenant;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        //
-    }
+        $search = $request->string('search')->toString();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $events = Event::query()
+            ->with(['organizer', 'venue'])
+            ->withEventCounts()
+            ->where('status', 'APPROVED')
+            ->search($search)
+            ->orderByDesc('event_start')
+            ->paginate(9)
+            ->withQueryString();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('tenant.events.index', [
+            'events' => $events,
+            'search' => $search,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(Request $request, Event $event): View
     {
-        //
-    }
+        abort_unless($event->status === 'APPROVED', 404);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Event $event)
-    {
-        //
-    }
+        $tenant = Tenant::query()
+            ->where('user_id', $request->user()->id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Event $event)
-    {
-        //
-    }
+        $alreadyRegistered = $tenant
+            ? EventRegistration::query()
+                ->where('tenant_id', $tenant->id)
+                ->where('event_id', $event->id)
+                ->where('registration_status', '!=', 'CANCELLED')
+                ->exists()
+            : false;
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Event $event)
-    {
-        //
+        $event->load(['organizer', 'venue'])->loadCount([
+            'slots',
+            'slots as booked_slots_count' => fn (Builder $query) => $query->where('is_booked', true),
+        ]);
+
+        return view('tenant.events.show', [
+            'event' => $event,
+            'tenant' => $tenant,
+            'alreadyRegistered' => $alreadyRegistered,
+        ]);
     }
 }
