@@ -1,0 +1,36 @@
+@layer base {
+    :root {
+        /* Brand palette — raw CSS vars for use in arbitrary CSS (gradients, shadows, etc.) */
+        --mojo-red: #9f1239;
+        --mojo-red-dark: #5f161f;
+        --mojo-terracotta: #c2410c;
+        --mojo-gold: #d97706;
+        --mojo-gold-soft: #ffedd5;
+        --mojo-teal: #0f766e;
+        --mojo-teal-soft: #ccfbf1;
+        --mojo-ink: #1f2937;
+        --mojo-surface: #fff7ed;
+
+        /* Dark mode surface tokens */
+        --mojo-dark-bg: #180f12;
+        --mojo-dark-surface: #241417;
+        --mojo-dark-card: #2b1a1c;
+        --mojo-dark-border: #56312a;
+    }
+
+    * { box-sizing: border-box; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #e7c8a0; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--mojo-gold); }
+}
+
+@layer utilities {
+    .fade-in { animation: fadeIn .25s ease-out both; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
