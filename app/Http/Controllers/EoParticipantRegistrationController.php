@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\EventOrganizer;
 use App\Models\ParticipantRegistration;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class EoParticipantRegistrationController extends Controller
+class EoParticipantRegistrationController extends EoBaseController
 {
     public function index(Request $request, Event $event): View
     {
@@ -53,12 +52,5 @@ class EoParticipantRegistrationController extends Controller
             'search' => $search,
             'attendanceStatus' => $attendanceStatus,
         ]);
-    }
-
-    private function authorizeEvent(Request $request, Event $event): void
-    {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-
-        abort_unless($event->organizer_id === $organizer->id, 403);
     }
 }

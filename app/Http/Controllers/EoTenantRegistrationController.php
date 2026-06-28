@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SlotAssignmentRequest;
 use App\Models\Event;
-use App\Models\EventOrganizer;
 use App\Models\EventRegistration;
 use App\Models\EventSlot;
 use App\Models\RegistrationSlot;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class EoTenantRegistrationController extends Controller
+class EoTenantRegistrationController extends EoBaseController
 {
     public function index(Request $request, Event $event): View
     {
@@ -82,45 +82,27 @@ class EoTenantRegistrationController extends Controller
         ]);
     }
 
-    public function approve(Request $request, Event $event, EventRegistration $registration): RedirectResponse
+    public function approve(SlotAssignmentRequest $request, Event $event, EventRegistration $registration): RedirectResponse
     {
         $this->authorizeEvent($request, $event);
         $this->abortUnlessEventRegistration($event, $registration);
 
-        $validated = $request->validate([
-            'slot_ids' => ['nullable', 'array'],
-            'slot_ids.*' => ['string', 'exists:event_slots,id'],
-        ]);
-
-        $slotIds = array_values(array_unique($validated['slot_ids'] ?? []));
+        $slotIds = array_values(array_unique($request->validated()['slot_ids'] ?? []));
         $result = $this->saveAssignment($request, $event, $registration, $slotIds, approve: true);
 
-        if ($result) {
-            return $result;
-        }
-
-        return to_route('eo.events.tenant-registrations.show', [$event, $registration])
+        return $result ?? to_route('eo.events.tenant-registrations.show', [$event, $registration])
             ->with('status', 'Pendaftaran tenant disetujui dan slot berhasil ditetapkan.');
     }
 
-    public function assign(Request $request, Event $event, EventRegistration $registration): RedirectResponse
+    public function assign(SlotAssignmentRequest $request, Event $event, EventRegistration $registration): RedirectResponse
     {
         $this->authorizeEvent($request, $event);
         $this->abortUnlessEventRegistration($event, $registration);
 
-        $validated = $request->validate([
-            'slot_ids' => ['nullable', 'array'],
-            'slot_ids.*' => ['string', 'exists:event_slots,id'],
-        ]);
-
-        $slotIds = array_values(array_unique($validated['slot_ids'] ?? []));
+        $slotIds = array_values(array_unique($request->validated()['slot_ids'] ?? []));
         $result = $this->saveAssignment($request, $event, $registration, $slotIds, approve: false);
 
-        if ($result) {
-            return $result;
-        }
-
-        return to_route('eo.events.tenant-registrations.show', [$event, $registration])
+        return $result ?? to_route('eo.events.tenant-registrations.show', [$event, $registration])
             ->with('status', 'Penugasan slot berhasil diperbarui.');
     }
 
@@ -248,17 +230,5 @@ class EoTenantRegistrationController extends Controller
         }
 
         return null;
-    }
-
-    private function authorizeEvent(Request $request, Event $event): void
-    {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-
-        abort_unless($event->organizer_id === $organizer->id, 403);
-    }
-
-    private function abortUnlessEventRegistration(Event $event, EventRegistration $registration): void
-    {
-        abort_unless($registration->event_id === $event->id, 404);
     }
 }

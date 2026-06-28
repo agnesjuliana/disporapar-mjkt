@@ -11,9 +11,6 @@ use Illuminate\View\View;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request): View
     {
         $search = $request->string('search')->toString();
@@ -33,16 +30,11 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request, Event $event): View
     {
         abort_unless($event->status === 'APPROVED', 404);
 
-        $tenant = Tenant::query()
-            ->where('user_id', $request->user()->id)
-            ->first();
+        $tenant = Tenant::query()->where('user_id', $request->user()->id)->first();
 
         $alreadyRegistered = $tenant
             ? EventRegistration::query()

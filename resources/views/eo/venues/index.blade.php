@@ -78,7 +78,7 @@
 
                     <h3 class="font-semibold text-slate-800 dark:text-slate-100 mb-1">{{ $venue->name }}</h3>
                     <div class="flex items-start gap-1.5 text-slate-400 text-xs mb-1">
-                        <i data-lucide="map-pin" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5"></i>
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i>
                         <span class="line-clamp-1">{{ $venue->address }}</span>
                     </div>
                     <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400 mb-3">

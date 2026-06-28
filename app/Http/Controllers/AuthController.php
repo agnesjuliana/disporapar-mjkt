@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\RegisterMasyarakatRequest;
+use App\Http\Requests\Auth\RegisterOrganizationRequest;
 use App\Models\EventOrganizer;
 use App\Models\Tenant;
 use App\Models\User;
@@ -12,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -85,9 +86,9 @@ class AuthController extends Controller
         return view('auth.masyarakat-registration');
     }
 
-    public function registerMasyarakat(Request $request): RedirectResponse
+    public function registerMasyarakat(RegisterMasyarakatRequest $request): RedirectResponse
     {
-        $validated = $this->validateUserRegistration($request);
+        $validated = $request->validated();
 
         $user = User::create([
             'id' => (string) Str::uuid(),
@@ -115,16 +116,9 @@ class AuthController extends Controller
         return view('auth.tenant-registration');
     }
 
-    public function registerTenant(Request $request): RedirectResponse
+    public function registerTenant(RegisterOrganizationRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:255'],
-            'org_name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', Password::min(8)],
-        ]);
+        $validated = $request->validated();
 
         $user = DB::transaction(function () use ($validated) {
             $user = User::create([
@@ -167,16 +161,9 @@ class AuthController extends Controller
         return view('auth.event-organizer-registration');
     }
 
-    public function registerEventOrganizer(Request $request): RedirectResponse
+    public function registerEventOrganizer(RegisterOrganizationRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:255'],
-            'org_name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'confirmed', Password::min(8)],
-        ]);
+        $validated = $request->validated();
 
         $user = DB::transaction(function () use ($validated) {
             $user = User::create([
@@ -292,18 +279,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('status', 'Anda berhasil keluar.');
-    }
-
-    /**
-     * @return array{name: string, email: string, password: string}
-     */
-    private function validateUserRegistration(Request $request): array
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Password::min(8)],
-        ]);
     }
 
     private function sendVerificationOtp(User $user): void

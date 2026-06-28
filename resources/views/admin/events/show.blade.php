@@ -75,7 +75,7 @@
                     ['icon' => 'shield-check', 'label' => 'Diproses Oleh', 'value' => $event->approver?->name ?? '-'],
                 ] as $detail)
                     <div class="flex items-start gap-2.5">
-                        <i data-lucide="{{ $detail['icon'] }}" class="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0"></i>
+                        <i data-lucide="{{ $detail['icon'] }}" class="w-4 h-4 text-slate-400 mt-0.5 shrink-0"></i>
                         <div>
                             <p class="text-[11px] text-slate-400 uppercase tracking-wide">{{ $detail['label'] }}</p>
                             <p class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ $detail['value'] }}</p>

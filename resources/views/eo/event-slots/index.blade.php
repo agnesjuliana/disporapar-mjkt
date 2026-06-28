@@ -104,7 +104,7 @@
             ['label' => 'Tersedia', 'value' => $availableSlots, 'color' => 'blue', 'icon' => 'square'],
         ] as $stat)
             <div class="card p-4 flex items-center gap-4">
-                <div class="w-11 h-11 rounded-lg bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900/30 flex items-center justify-center flex-shrink-0">
+                <div class="w-11 h-11 rounded-lg bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900/30 flex items-center justify-center shrink-0">
                     <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5 text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-400"></i>
                 </div>
                 <div class="min-w-0">
@@ -249,7 +249,7 @@
         <div class="modal-box slot-modal">
             <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 flex items-center justify-center flex-shrink-0">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 flex items-center justify-center shrink-0">
                         <i data-lucide="grid-2x2" class="w-5 h-5"></i>
                     </div>
                     <div class="min-w-0">
@@ -263,7 +263,7 @@
             </div>
 
             <div class="slot-modal-body">
-            <div class="flex gap-1 bg-slate-100 dark:bg-slate-700 rounded-lg p-1 m-6 mb-0 flex-shrink-0">
+            <div class="flex gap-1 bg-slate-100 dark:bg-slate-700 rounded-lg p-1 m-6 mb-0 shrink-0">
                 <button type="button" onclick="switchSlotTab('multi')" id="tab-multi" class="flex-1 text-sm py-1.5 rounded-md font-medium transition-all bg-white dark:bg-slate-800 shadow text-slate-700 dark:text-slate-200">
                     Multi-Type Bulk
                 </button>

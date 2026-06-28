@@ -2,32 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVenueBookingRequest;
 use App\Models\Event;
-use App\Models\EventOrganizer;
 use App\Models\Venue;
 use App\Models\VenueBooking;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class EoVenueBookingController extends Controller
+class EoVenueBookingController extends EoBaseController
 {
     public function venues(Request $request): View
     {
-        $organizer = $this->organizerFor($request);
+        $organizer = $this->resolveOrganizer($request);
         $search = $request->string('search')->toString();
 
         $venues = Venue::query()
-            ->with([
-                'venueBookings' => function ($query) {
-                    $query
-                        ->whereIn('status', ['PENDING', 'APPROVED'])
-                        ->where('booking_start', '<=', now())
-                        ->where('booking_end', '>=', now())
-                        ->orderByRaw("case when status = 'APPROVED' then 0 else 1 end")
-                        ->orderBy('booking_end');
-                },
-            ])
+            ->withCurrentBookings()
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     $query
@@ -53,7 +45,7 @@ class EoVenueBookingController extends Controller
 
     public function bookings(Request $request): View
     {
-        $organizer = $this->organizerFor($request);
+        $organizer = $this->resolveOrganizer($request);
         $status = $request->string('status')->toString();
 
         $bookings = VenueBooking::query()
@@ -70,16 +62,10 @@ class EoVenueBookingController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreVenueBookingRequest $request): RedirectResponse
     {
-        $organizer = $this->organizerFor($request);
-
-        $validated = $request->validate([
-            'venue_id' => ['required', 'exists:venues,id'],
-            'event_id' => ['nullable', 'exists:events,id'],
-            'booking_start' => ['required', 'date'],
-            'booking_end' => ['required', 'date', 'after:booking_start'],
-        ]);
+        $organizer = $this->resolveOrganizer($request);
+        $validated = $request->validated();
 
         if (! empty($validated['event_id'])) {
             Event::query()
@@ -101,10 +87,5 @@ class EoVenueBookingController extends Controller
 
         return to_route('eo.venue-booking')
             ->with('status', 'Permintaan booking venue berhasil dikirim.');
-    }
-
-    private function organizerFor(Request $request): EventOrganizer
-    {
-        return EventOrganizer::forUserOrCreate($request->user());
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRegistrationRequest;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventSlot;
@@ -17,7 +18,7 @@ class EventRegistrationController extends Controller
 {
     public function index(Request $request): View
     {
-        $tenant = $this->tenantFor($request);
+        $tenant = Tenant::forUser($request->user());
         $status = $request->string('status')->toString();
 
         $registrations = EventRegistration::query()
@@ -38,7 +39,7 @@ class EventRegistrationController extends Controller
 
     public function create(Request $request): View|RedirectResponse
     {
-        $tenant = $this->tenantFor($request);
+        $tenant = Tenant::forUser($request->user());
         $eventId = $request->string('event_id')->toString();
         $event = Event::query()
             ->with(['organizer', 'venue'])
@@ -63,16 +64,10 @@ class EventRegistrationController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreEventRegistrationRequest $request): RedirectResponse
     {
-        $tenant = $this->tenantFor($request);
-        $validated = $request->validate([
-            'event_id' => ['required', 'exists:events,id'],
-            'requested_slot_count' => ['required', 'integer', 'min:1', 'max:20'],
-            'requested_slot_ids' => ['nullable', 'array'],
-            'requested_slot_ids.*' => ['string', 'exists:event_slots,id'],
-            'notes' => ['nullable', 'string', 'max:2000'],
-        ]);
+        $tenant = Tenant::forUser($request->user());
+        $validated = $request->validated();
 
         $event = Event::query()
             ->with(['slots' => fn ($query) => $query->where('is_booked', false)])
@@ -141,7 +136,7 @@ class EventRegistrationController extends Controller
 
     public function show(Request $request, EventRegistration $eventRegistration): View
     {
-        $tenant = $this->tenantFor($request);
+        $tenant = Tenant::forUser($request->user());
         abort_unless($eventRegistration->tenant_id === $tenant->id, 403);
 
         $eventRegistration->load([
@@ -160,7 +155,7 @@ class EventRegistrationController extends Controller
 
     public function cancel(Request $request, EventRegistration $eventRegistration): RedirectResponse
     {
-        $tenant = $this->tenantFor($request);
+        $tenant = Tenant::forUser($request->user());
         abort_unless($eventRegistration->tenant_id === $tenant->id, 403);
 
         if ($eventRegistration->registration_status !== 'PENDING') {
@@ -184,13 +179,6 @@ class EventRegistrationController extends Controller
 
         return to_route('event-registrations.index')
             ->with('status', 'Booking tenant berhasil dibatalkan.');
-    }
-
-    private function tenantFor(Request $request): Tenant
-    {
-        return Tenant::query()
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
     }
 
     private function guardRegistration(Tenant $tenant, Event $event): ?RedirectResponse

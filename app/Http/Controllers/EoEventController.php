@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRequest;
 use App\Models\Event;
-use App\Models\EventOrganizer;
 use App\Models\Venue;
+use App\Traits\HandlesImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-class EoEventController extends Controller
+class EoEventController extends EoBaseController
 {
+    use HandlesImageUpload;
+
     public function index(Request $request): View
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
+        $organizer = $this->resolveOrganizer($request);
         $search = $request->string('search')->toString();
         $status = $request->string('status')->toString();
 
@@ -45,16 +46,15 @@ class EoEventController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreEventRequest $request): RedirectResponse
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-        $validated = $this->validatedEvent($request);
+        $organizer = $this->resolveOrganizer($request);
 
         $event = Event::create([
             'id' => (string) Str::uuid(),
             'organizer_id' => $organizer->id,
             'status' => 'DRAFT',
-            ...$this->eventPayload($validated, $request),
+            ...$this->eventPayload($request->validated(), $request),
         ]);
 
         return to_route('eo.events.show', $event)
@@ -63,8 +63,7 @@ class EoEventController extends Controller
 
     public function show(Request $request, Event $event): View
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-        abort_unless($event->organizer_id === $organizer->id, 403);
+        $this->authorizeEvent($request, $event);
 
         $event->load([
             'venue',
@@ -87,8 +86,7 @@ class EoEventController extends Controller
 
     public function edit(Request $request, Event $event): View|RedirectResponse
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-        abort_unless($event->organizer_id === $organizer->id, 403);
+        $this->authorizeEvent($request, $event);
 
         if (! in_array($event->status, ['DRAFT', 'REJECTED'], true)) {
             return to_route('eo.events.show', $event)
@@ -101,23 +99,20 @@ class EoEventController extends Controller
         ]);
     }
 
-    public function update(Request $request, Event $event): RedirectResponse
+    public function update(StoreEventRequest $request, Event $event): RedirectResponse
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-        abort_unless($event->organizer_id === $organizer->id, 403);
+        $this->authorizeEvent($request, $event);
 
         if (! in_array($event->status, ['DRAFT', 'REJECTED'], true)) {
             return to_route('eo.events.show', $event)
                 ->with('status', 'Event tidak dapat diedit pada status ini.');
         }
 
-        $validated = $this->validatedEvent($request);
-
         if ($request->hasFile('banner') && $event->banner_url) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $event->banner_url));
+            $this->deleteImageUrl($event->banner_url);
         }
 
-        $event->update($this->eventPayload($validated, $request));
+        $event->update($this->eventPayload($request->validated(), $request));
 
         return to_route('eo.events.show', $event)
             ->with('status', 'Event berhasil diperbarui.');
@@ -125,8 +120,7 @@ class EoEventController extends Controller
 
     public function submit(Request $request, Event $event): RedirectResponse
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-        abort_unless($event->organizer_id === $organizer->id, 403);
+        $this->authorizeEvent($request, $event);
 
         if (! in_array($event->status, ['DRAFT', 'REJECTED'], true)) {
             return to_route('eo.events.show', $event)
@@ -146,8 +140,7 @@ class EoEventController extends Controller
 
     public function cancel(Request $request, Event $event): RedirectResponse
     {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-        abort_unless($event->organizer_id === $organizer->id, 403);
+        $this->authorizeEvent($request, $event);
 
         if (! in_array($event->status, ['DRAFT', 'PENDING_APPROVAL'], true)) {
             return to_route('eo.events.show', $event)
@@ -158,28 +151,6 @@ class EoEventController extends Controller
 
         return to_route('eo.events.index')
             ->with('status', 'Event berhasil dibatalkan.');
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function validatedEvent(Request $request): array
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'venue_type' => ['required', Rule::in(['INTERNAL', 'EXTERNAL'])],
-            'venue_id' => ['nullable', 'required_if:venue_type,INTERNAL', 'exists:venues,id'],
-            'external_venue_name' => ['nullable', 'required_if:venue_type,EXTERNAL', 'string', 'max:255'],
-            'external_venue_address' => ['nullable', 'string', 'max:255'],
-            'external_venue_capacity' => ['nullable', 'integer', 'min:0'],
-            'event_start' => ['required', 'date'],
-            'event_end' => ['required', 'date', 'after:event_start'],
-            'registration_deadline' => ['nullable', 'date', 'before_or_equal:event_start'],
-            'slot_size' => ['nullable', 'integer', 'min:0'],
-            'capacity' => ['nullable', 'integer', 'min:0'],
-            'banner' => ['nullable', 'image', 'max:2048'],
-        ]);
     }
 
     /**
@@ -205,10 +176,9 @@ class EoEventController extends Controller
         ];
 
         if ($request->hasFile('banner')) {
-            $payload['banner_url'] = '/storage/'.$request->file('banner')->store('event-banners', 'public');
+            $payload['banner_url'] = $this->uploadImage($request->file('banner'), 'event-banners');
         }
 
         return $payload;
     }
 }
-

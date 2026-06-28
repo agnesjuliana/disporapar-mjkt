@@ -108,19 +108,4 @@ class ParticipantRegistrationController extends Controller
             'registration' => $participantRegistration,
         ]);
     }
-
-    public function edit(ParticipantRegistration $participantRegistration)
-    {
-        abort(404);
-    }
-
-    public function update(Request $request, ParticipantRegistration $participantRegistration)
-    {
-        abort(404);
-    }
-
-    public function destroy(ParticipantRegistration $participantRegistration)
-    {
-        abort(404);
-    }
 }

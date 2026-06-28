@@ -10,13 +10,13 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
         @foreach ([
-            ['label' => 'Total Event', 'value' => $stats['total'], 'icon' => 'calendar', 'iconClass' => 'bg-orange-50 text-[#9f1239] dark:bg-orange-100 dark:text-[#9f1239]'],
+            ['label' => 'Total Event', 'value' => $stats['total'], 'icon' => 'calendar', 'iconClass' => 'bg-orange-50 text-brand-red dark:bg-orange-100 dark:text-brand-red'],
             ['label' => 'Menunggu Persetujuan', 'value' => $stats['pending'], 'icon' => 'clock', 'iconClass' => 'bg-amber-50 text-amber-700 dark:bg-amber-100 dark:text-amber-800'],
             ['label' => 'Disetujui', 'value' => $stats['approved'], 'icon' => 'check-circle', 'iconClass' => 'bg-teal-50 text-teal-700 dark:bg-teal-100 dark:text-teal-800'],
             ['label' => 'Sedang Berlangsung', 'value' => $stats['ongoing'], 'icon' => 'zap', 'iconClass' => 'bg-rose-50 text-rose-700 dark:bg-rose-100 dark:text-rose-800'],
         ] as $stat)
             <div class="card p-4 min-h-[116px] flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl {{ $stat['iconClass'] }} flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 rounded-xl {{ $stat['iconClass'] }} flex items-center justify-center shrink-0">
                     <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5"></i>
                 </div>
                 <div class="min-w-0">
@@ -89,7 +89,7 @@
                             <tr>
                                 <td class="text-slate-400 text-xs">{{ $events->firstItem() + $loop->index }}</td>
                                 <td>
-                                    <a href="{{ route('admin.events.show', $event) }}" class="font-medium text-[#9f1239] dark:text-orange-200 hover:underline">
+                                    <a href="{{ route('admin.events.show', $event) }}" class="font-medium text-brand-red dark:text-orange-200 hover:underline">
                                         {{ str($event->name)->limit(40) }}
                                     </a>
                                     <p class="text-xs text-slate-400 dark:text-orange-100/65 mt-0.5">{{ $event->venue_type === 'EXTERNAL' ? 'Venue Eksternal' : 'Venue Internal' }}</p>
@@ -108,7 +108,7 @@
                                         <div class="text-xs font-medium">{{ $slotBooked }}/{{ $slotTotal }}</div>
                                         @if ($slotTotal > 0)
                                             <div class="w-12 h-1.5 bg-slate-200 dark:bg-[#3a211f] rounded-full overflow-hidden">
-                                                <div class="h-full bg-[#9f1239] dark:bg-orange-300 rounded-full" style="width: {{ $slotPercent }}%"></div>
+                                                <div class="h-full bg-brand-red dark:bg-orange-300 rounded-full" style="width: {{ $slotPercent }}%"></div>
                                             </div>
                                         @endif
                                     </div>

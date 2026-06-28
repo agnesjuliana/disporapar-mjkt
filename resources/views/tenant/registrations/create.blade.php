@@ -19,7 +19,7 @@
                 <div class="card mb-4 border border-indigo-100 dark:border-indigo-900 bg-indigo-50/50 dark:bg-indigo-950/20">
                     <h3 class="font-semibold text-sm mb-2 text-indigo-700 dark:text-indigo-300">Event yang Dipilih</h3>
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center flex-shrink-0">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center shrink-0">
                             <i data-lucide="calendar" class="w-5 h-5 text-indigo-600"></i>
                         </div>
                         <div>

@@ -10,14 +10,14 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mb-5">
         @foreach ([
-            ['label' => 'Total Booking', 'value' => $stats['total'], 'icon' => 'calendar-check', 'iconClass' => 'bg-orange-50 text-[#9f1239] dark:bg-orange-100 dark:text-[#9f1239]'],
+            ['label' => 'Total Booking', 'value' => $stats['total'], 'icon' => 'calendar-check', 'iconClass' => 'bg-orange-50 text-brand-red dark:bg-orange-100 dark:text-brand-red'],
             ['label' => 'Menunggu', 'value' => $stats['pending'], 'icon' => 'clock', 'iconClass' => 'bg-amber-50 text-amber-700 dark:bg-amber-100 dark:text-amber-800'],
             ['label' => 'Disetujui', 'value' => $stats['approved'], 'icon' => 'check-circle', 'iconClass' => 'bg-teal-50 text-teal-700 dark:bg-teal-100 dark:text-teal-800'],
             ['label' => 'Ditolak', 'value' => $stats['rejected'], 'icon' => 'x-circle', 'iconClass' => 'bg-red-50 text-red-700 dark:bg-red-100 dark:text-red-800'],
             ['label' => 'Dibatalkan', 'value' => $stats['cancelled'], 'icon' => 'ban', 'iconClass' => 'bg-stone-100 text-stone-700 dark:bg-stone-100 dark:text-stone-800'],
         ] as $stat)
             <div class="card p-4 min-h-[116px] flex items-center gap-4">
-                <div class="w-12 h-12 rounded-xl {{ $stat['iconClass'] }} flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 rounded-xl {{ $stat['iconClass'] }} flex items-center justify-center shrink-0">
                     <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5"></i>
                 </div>
                 <div class="min-w-0">

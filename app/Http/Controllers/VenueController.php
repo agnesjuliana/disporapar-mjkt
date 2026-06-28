@@ -2,33 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVenueRequest;
 use App\Models\Venue;
+use App\Traits\HandlesImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class VenueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use HandlesImageUpload;
+
     public function index(Request $request): View
     {
         $search = $request->string('search')->toString();
 
         $venues = Venue::query()
-            ->with([
-                'venueBookings' => function ($query) {
-                    $query
-                        ->whereIn('status', ['PENDING', 'APPROVED'])
-                        ->where('booking_start', '<=', now())
-                        ->where('booking_end', '>=', now())
-                        ->orderByRaw("case when status = 'APPROVED' then 0 else 1 end")
-                        ->orderBy('booking_end');
-                },
-            ])
+            ->withCurrentBookings()
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     $query
@@ -46,24 +37,17 @@ class VenueController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(): View
     {
         return view('admin.venues.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreVenueRequest $request): RedirectResponse
     {
-        $payload = $this->validatedVenue($request);
-        unset($payload['image']);
+        $payload = $request->safe()->except('image');
 
         if ($request->hasFile('image')) {
-            $payload['image_url'] = '/storage/'.$request->file('image')->store('venue-images', 'public');
+            $payload['image_url'] = $this->uploadImage($request->file('image'), 'venue-images');
         }
 
         Venue::create([
@@ -76,9 +60,6 @@ class VenueController extends Controller
             ->with('status', 'Venue berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Venue $venue): View
     {
         return view('admin.venues.show', [
@@ -86,9 +67,6 @@ class VenueController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Venue $venue): View
     {
         return view('admin.venues.edit', [
@@ -96,17 +74,13 @@ class VenueController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Venue $venue): RedirectResponse
+    public function update(StoreVenueRequest $request, Venue $venue): RedirectResponse
     {
-        $payload = $this->validatedVenue($request);
-        unset($payload['image']);
+        $payload = $request->safe()->except('image');
 
         if ($request->hasFile('image')) {
-            $this->deleteVenueImage($venue);
-            $payload['image_url'] = '/storage/'.$request->file('image')->store('venue-images', 'public');
+            $this->deleteImageUrl($venue->image_url);
+            $payload['image_url'] = $this->uploadImage($request->file('image'), 'venue-images');
         }
 
         $venue->update($payload);
@@ -116,43 +90,13 @@ class VenueController extends Controller
             ->with('status', 'Venue berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Venue $venue): RedirectResponse
     {
-        $this->deleteVenueImage($venue);
+        $this->deleteImageUrl($venue->image_url);
         $venue->delete();
 
         return redirect()
             ->route('admin.venues.index')
             ->with('status', 'Venue berhasil dihapus.');
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function validatedVenue(Request $request): array
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'capacity' => ['required', 'integer', 'min:0'],
-            'description' => ['required', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'lowest_price' => ['required', 'numeric', 'min:0'],
-            'highest_price' => ['required', 'numeric', 'min:0', 'gte:lowest_price'],
-            'available_from' => ['required', 'date'],
-            'available_to' => ['required', 'date', 'after_or_equal:available_from'],
-        ]);
-    }
-
-    private function deleteVenueImage(Venue $venue): void
-    {
-        if (! $venue->image_url) {
-            return;
-        }
-
-        Storage::disk('public')->delete(str_replace('/storage/', '', $venue->image_url));
     }
 }

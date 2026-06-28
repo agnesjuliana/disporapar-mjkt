@@ -17,7 +17,7 @@
 
             @if ($errors->any())
                 <div class="flex items-start gap-3 p-3.5 rounded-xl mb-5 bg-red-950 border border-red-800 text-red-300">
-                    <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                    <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i>
                     <span class="text-sm">{{ $errors->first() }}</span>
                 </div>
             @endif
@@ -104,7 +104,7 @@
                 </div>
 
                 <div class="flex items-start gap-2.5 bg-orange-950/50 border border-orange-800/40 rounded-xl p-3 mt-1">
-                    <i data-lucide="info" class="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i>
+                    <i data-lucide="info" class="w-4 h-4 text-orange-400 shrink-0 mt-0.5"></i>
                     <p class="text-orange-300 text-xs leading-relaxed">
                         Setelah mendaftar, akun Anda akan diverifikasi oleh Admin Disporapar sebelum dapat mengikuti event.
                     </p>

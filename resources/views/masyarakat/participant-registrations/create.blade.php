@@ -38,7 +38,7 @@
                         ['icon' => 'user', 'label' => 'Nama Peserta', 'value' => $user->name],
                     ] as $item)
                         <div class="flex items-start gap-3">
-                            <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 flex items-center justify-center flex-shrink-0">
+                            <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 flex items-center justify-center shrink-0">
                                 <i data-lucide="{{ $item['icon'] }}" class="w-4 h-4"></i>
                             </div>
                             <div>

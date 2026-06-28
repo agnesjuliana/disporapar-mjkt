@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\ManageUserRequest;
 use App\Models\EventOrganizer;
 use App\Models\Tenant;
 use App\Models\User;
@@ -10,8 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -62,9 +61,9 @@ class UserController extends Controller
         return view('admin.users.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ManageUserRequest $request): RedirectResponse
     {
-        $validated = $this->validateUser($request);
+        $validated = $request->validated();
 
         DB::transaction(function () use ($validated): void {
             $user = User::create([
@@ -101,9 +100,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(ManageUserRequest $request, User $user): RedirectResponse
     {
-        $validated = $this->validateUser($request, $user);
+        $validated = $request->validated();
 
         DB::transaction(function () use ($user, $validated): void {
             $payload = [
@@ -133,32 +132,6 @@ class UserController extends Controller
         $user->delete();
 
         return to_route('users.index')->with('status', 'Pengguna berhasil dihapus.');
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function validateUser(Request $request, ?User $user = null): array
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('users', 'email')->ignore($user?->id),
-            ],
-            'role' => [
-                $user ? 'sometimes' : 'required',
-                Rule::in(['ADMIN', 'EVENT_ORGANIZER', 'TENANT', 'MASYARAKAT']),
-            ],
-            'status' => ['required', Rule::in(['ACTIVE', 'INACTIVE', 'SUSPENDED'])],
-            'is_verified' => ['nullable', 'boolean'],
-            'password' => [$user ? 'nullable' : 'required', 'confirmed', Password::min(8)],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'org_name' => ['nullable', 'required_if:role,EVENT_ORGANIZER,TENANT', 'string', 'max:255'],
-            'address' => ['nullable', 'required_if:role,EVENT_ORGANIZER,TENANT', 'string', 'max:255'],
-        ]);
     }
 
     /**

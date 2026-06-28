@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,5 +47,18 @@ class Venue extends Model
     public function venueBookings(): HasMany
     {
         return $this->hasMany(VenueBooking::class);
+    }
+
+    public function scopeWithCurrentBookings(Builder $query): Builder
+    {
+        return $query->with([
+            'venueBookings' => function ($q) {
+                $q->whereIn('status', ['PENDING', 'APPROVED'])
+                    ->where('booking_start', '<=', now())
+                    ->where('booking_end', '>=', now())
+                    ->orderByRaw("case when status = 'APPROVED' then 0 else 1 end")
+                    ->orderBy('booking_end');
+            },
+        ]);
     }
 }

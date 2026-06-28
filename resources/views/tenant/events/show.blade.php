@@ -24,7 +24,7 @@
                     <h1 class="text-white font-bold text-2xl leading-tight drop-shadow">{{ $event->name }}</h1>
                     <p class="text-white/75 text-sm mt-1">{{ $event->organizer?->organization_name ?? 'Disporapar' }}</p>
                 </div>
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     @if ($alreadyRegistered)
                         <span class="badge badge-green shadow-lg text-sm px-3 py-1.5">Sudah Terdaftar</span>
                     @elseif ($deadlinePassed)
@@ -93,7 +93,7 @@
                     ['icon' => 'grid', 'label' => 'Slot Tersedia', 'value' => $availableSlots.' dari '.$slotTotal],
                 ] as $detail)
                     <div class="flex items-start gap-2.5">
-                        <i data-lucide="{{ $detail['icon'] }}" class="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0"></i>
+                        <i data-lucide="{{ $detail['icon'] }}" class="w-4 h-4 text-slate-400 mt-0.5 shrink-0"></i>
                         <div>
                             <p class="text-[11px] text-slate-400">{{ $detail['label'] }}</p>
                             <p class="text-sm font-medium">{{ $detail['value'] }}</p>

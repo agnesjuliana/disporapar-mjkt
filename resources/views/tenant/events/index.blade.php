@@ -79,16 +79,16 @@
 
                         <div class="space-y-1.5 mb-4">
                             <div class="flex items-center gap-2 text-xs text-slate-500">
-                                <i data-lucide="calendar" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 shrink-0"></i>
                                 <span>{{ $event->event_start?->format('d M Y') }} - {{ $event->event_end?->format('d M Y') }}</span>
                             </div>
                             <div class="flex items-center gap-2 text-xs text-slate-500">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0"></i>
                                 <span class="truncate">{{ $venueName ?? 'Venue TBD' }}</span>
                             </div>
                             @if ($event->registration_deadline)
                                 <div class="flex items-center gap-2 text-xs {{ $deadlineStatus === 'SOON' ? 'text-amber-500 font-medium' : 'text-slate-500' }}">
-                                    <i data-lucide="clock" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                                    <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0"></i>
                                     <span>Deadline: {{ $event->registration_deadline->format('d M Y H:i') }}</span>
                                 </div>
                             @endif

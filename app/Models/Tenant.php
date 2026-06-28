@@ -50,4 +50,9 @@ class Tenant extends Model
     {
         return $this->hasMany(EventRegistration::class);
     }
+
+    public static function forUser(User $user): self
+    {
+        return self::query()->where('user_id', $user->id)->firstOrFail();
+    }
 }

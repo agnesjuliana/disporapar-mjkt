@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use App\Models\EventOrganizer;
 use App\Models\EventSlot;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -12,7 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-class EoEventSlotController extends Controller
+class EoEventSlotController extends EoBaseController
 {
     public function index(Request $request, Event $event): View|RedirectResponse
     {
@@ -119,13 +118,6 @@ class EoEventSlotController extends Controller
 
         return to_route('eo.events.slots.index', $event)
             ->with('status', 'Slot berhasil dihapus.');
-    }
-
-    private function authorizeEvent(Request $request, Event $event): void
-    {
-        $organizer = EventOrganizer::forUserOrCreate($request->user());
-
-        abort_unless($event->organizer_id === $organizer->id, 403);
     }
 
     private function canManageSlots(Event $event): bool

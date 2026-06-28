@@ -1,6 +1,6 @@
 <x-layouts.app title="Home" current-page="home" :role="$menu['role']">
     <div class="space-y-6">
-        <section class="relative overflow-hidden rounded-2xl border border-amber-200/70 dark:border-amber-500/20 bg-[#7f1d1d] min-h-[220px] shadow-sm">
+        <section class="relative overflow-hidden rounded-2xl border border-amber-200/70 dark:border-amber-500/20 bg-indigo-900 min-h-[220px] shadow-sm">
             <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(127,29,29,.98),rgba(180,83,9,.88),rgba(15,118,110,.72))]"></div>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_top,rgba(15,23,42,.32),transparent)]"></div>
             <div class="absolute -right-10 bottom-0 w-80 h-36 opacity-25">
@@ -48,7 +48,7 @@
 
         <section class="space-y-4">
             <div>
-                <p class="text-sm font-semibold text-[#9f1239] dark:text-orange-300">Menu Akses</p>
+                <p class="text-sm font-semibold text-brand-red dark:text-orange-300">Menu Akses</p>
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white">Pilih modul yang tersedia untuk role Anda</h2>
             </div>
 
@@ -58,7 +58,7 @@
 
                     <a href="{{ url($item['href']) }}" class="card group hover:border-amber-400 dark:hover:border-orange-400 min-h-[150px]">
                         <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center text-[#9f1239] dark:text-orange-300 group-hover:text-[#c2410c]">
+                            <div class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center text-brand-red dark:text-orange-300 group-hover:text-brand-terracotta">
                                 <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5"></i>
                             </div>
                             <div class="min-w-0">

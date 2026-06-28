@@ -33,7 +33,7 @@
             </div>
             <div class="card bg-amber-50 dark:bg-amber-950/30 border-amber-100 dark:border-amber-900">
                 <div class="flex gap-2.5">
-                    <i data-lucide="info" class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                    <i data-lucide="info" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i>
                     <p class="text-xs text-amber-600 dark:text-amber-400">Event yang diajukan akan ditinjau oleh Admin Disporapar sebelum dipublikasikan kepada tenant.</p>
                 </div>
             </div>

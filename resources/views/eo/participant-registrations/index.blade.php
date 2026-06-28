@@ -25,7 +25,7 @@
             ['label' => 'Tingkat Hadir', 'value' => $stats['attendance_rate'].'%', 'icon' => 'activity', 'color' => 'blue'],
         ] as $stat)
             <div class="card p-4 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900/30 text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-300 flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 rounded-lg bg-{{ $stat['color'] }}-100 dark:bg-{{ $stat['color'] }}-900/30 text-{{ $stat['color'] }}-600 dark:text-{{ $stat['color'] }}-300 flex items-center justify-center shrink-0">
                     <i data-lucide="{{ $stat['icon'] }}" class="w-5 h-5"></i>
                 </div>
                 <div class="min-w-0">

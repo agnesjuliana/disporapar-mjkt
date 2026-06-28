@@ -14,7 +14,7 @@
         ),
         'data-auto-dismiss' => '4500',
     ]) }}>
-        <i data-lucide="{{ $isError ? 'x-circle' : 'check-circle' }}" class="w-4 h-4 flex-shrink-0"></i>
+        <i data-lucide="{{ $isError ? 'x-circle' : 'check-circle' }}" class="w-4 h-4 shrink-0"></i>
         <span class="text-sm">{{ $message }}</span>
     </div>
 @endif
