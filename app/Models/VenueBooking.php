@@ -21,6 +21,7 @@ class VenueBooking extends Model
         'event_id',
         'booking_start',
         'booking_end',
+        'booking_type',
         'status',
         'requested_at',
         'approved_by',
