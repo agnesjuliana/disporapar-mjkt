@@ -13,11 +13,11 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
             @include('eo.events._form', [
-                'event' => $event,
-                'venues' => $venues,
-                'action' => route('eo.events.update', $event),
-                'method' => 'PUT',
-                'submitLabel' => 'Simpan Perubahan',
+                'event'            => $event,
+                'approvedBookings' => $approvedBookings,
+                'action'           => route('eo.events.update', $event),
+                'method'           => 'PUT',
+                'submitLabel'      => 'Simpan Perubahan',
             ])
         </div>
 

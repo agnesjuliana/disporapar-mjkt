@@ -77,14 +77,51 @@
 
             <div id="internal-venue">
                 <label class="form-label" for="venue_id">Pilih Venue <span class="text-red-500">*</span></label>
-                <select name="venue_id" id="venue_id" class="form-select">
-                    <option value="">-- Pilih venue --</option>
-                    @foreach ($venues as $venue)
-                        <option value="{{ $venue->id }}" @selected(old('venue_id', $event->venue_id) === $venue->id)>
-                            {{ $venue->name }} (Kap. {{ number_format($venue->capacity) }} orang)
-                        </option>
-                    @endforeach
-                </select>
+                @php
+                    $venueBookingRanges = [];
+                    foreach ($approvedBookings as $bk) {
+                        $vid = $bk->venue_id;
+                        if (!isset($venueBookingRanges[$vid])) {
+                            $venueBookingRanges[$vid] = ['venue' => $bk->venue, 'ranges' => []];
+                        }
+                        $venueBookingRanges[$vid]['ranges'][] = [
+                            'start' => $bk->booking_start->format('Y-m-d\TH:i'),
+                            'end'   => $bk->booking_end->format('Y-m-d\TH:i'),
+                        ];
+                    }
+                @endphp
+
+                @if (empty($venueBookingRanges))
+                    <div class="mt-1 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-sm text-amber-700 dark:text-amber-400 flex gap-2 items-start">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                        <span>Belum ada booking venue yang disetujui.
+                            <a href="{{ route('eo.daftar-venue') }}" class="underline font-medium">Booking venue terlebih dahulu.</a>
+                        </span>
+                    </div>
+                @else
+                    <select name="venue_id" id="venue_id" class="form-select" onchange="onVenueChange(this)">
+                        <option value="">-- Pilih venue --</option>
+                        @foreach ($venueBookingRanges as $venueId => $data)
+                            <option
+                                value="{{ $venueId }}"
+                                @selected(old('venue_id', $event->venue_id) === $venueId)
+                                data-ranges="{{ json_encode($data['ranges']) }}"
+                            >
+                                {{ $data['venue']->name }} (Kap. {{ number_format($data['venue']->capacity) }} orang)
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <div id="booking-range-info" class="hidden mt-2 p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg text-sm">
+                        <p class="font-medium text-blue-700 dark:text-blue-300 mb-1 flex items-center gap-1.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            Rentang booking yang disetujui:
+                        </p>
+                        <ul id="booking-range-list" class="list-disc list-inside text-blue-600 dark:text-blue-400 text-xs space-y-0.5"></ul>
+                        <p class="text-xs text-blue-500 dark:text-blue-500 mt-1.5">Waktu mulai &amp; selesai event harus berada dalam rentang ini.</p>
+                    </div>
+                @endif
+
                 @error('venue_id')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
             </div>
 
@@ -159,14 +196,56 @@
             document.getElementById('external-venue')?.classList.toggle('hidden', type !== 'EXTERNAL');
             const venueInput = document.getElementById('venue_id');
             if (venueInput) venueInput.required = type === 'INTERNAL';
+
+            if (type !== 'INTERNAL') {
+                clearVenueConstraints();
+            } else {
+                const sel = document.getElementById('venue_id');
+                if (sel && sel.value) onVenueChange(sel);
+            }
+        }
+
+        function clearVenueConstraints() {
+            document.getElementById('booking-range-info')?.classList.add('hidden');
+            ['event_start', 'event_end'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) { el.removeAttribute('min'); el.removeAttribute('max'); }
+            });
+        }
+
+        function onVenueChange(select) {
+            var opt = select.options[select.selectedIndex];
+            var ranges = JSON.parse(opt.dataset.ranges || '[]');
+            var info = document.getElementById('booking-range-info');
+            var list = document.getElementById('booking-range-list');
+
+            if (!ranges.length) { clearVenueConstraints(); return; }
+
+            if (info) info.classList.remove('hidden');
+            if (list) {
+                list.innerHTML = ranges.map(function (r) {
+                    var fmt = function (d) {
+                        return new Date(d).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+                    };
+                    return '<li>' + fmt(r.start) + ' – ' + fmt(r.end) + '</li>';
+                }).join('');
+            }
+
+            var earliest = ranges.reduce(function (m, r) { return r.start < m ? r.start : m; }, ranges[0].start);
+            var latest   = ranges.reduce(function (m, r) { return r.end   > m ? r.end   : m; }, ranges[0].end);
+
+            var startEl = document.getElementById('event_start');
+            var endEl   = document.getElementById('event_end');
+            if (startEl) { startEl.min = earliest; startEl.max = latest; }
+            if (endEl)   { endEl.min   = earliest; endEl.max   = latest; }
         }
 
         function previewBanner(input) {
-            const preview = document.getElementById('banner-preview');
-            if (!preview || !input.files?.[0]) return;
-            const reader = new FileReader();
-            reader.onload = event => {
-                preview.src = event.target.result;
+            var preview = document.getElementById('banner-preview');
+            if (!preview || !input.files || !input.files[0]) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
                 preview.classList.remove('hidden');
             };
             reader.readAsDataURL(input.files[0]);

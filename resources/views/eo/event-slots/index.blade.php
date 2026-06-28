@@ -2,31 +2,35 @@
     <x-ui.flash-banner />
 
     <style>
+        /* Right-side drawer overlay — sits above sidebar (z-40) and header (z-30) */
         .slot-modal-overlay {
-            background: rgba(15, 23, 42, .42);
-            backdrop-filter: none;
             position: fixed;
-            top: -4rem;
-            bottom: 0;
-            height: calc(100vh + 4rem);
+            inset: 0;
+            z-index: 60;
+            background: rgba(15, 23, 42, .5);
+            backdrop-filter: none;
             align-items: stretch;
             justify-content: flex-end;
             padding: 0;
         }
+        /* Override .modal-box defaults so the panel is a full-height right drawer */
         .slot-modal {
-            width: min(760px, 100vw);
-            max-width: 760px;
-            height: 100vh;
-            max-height: 100vh;
+            width: min(680px, 100vw);
+            max-width: none;
+            height: 100%;
+            max-height: none;
             border-radius: 0;
             overflow: hidden;
             border: 0;
             border-left: 1px solid #e2e8f0;
-            box-shadow: -18px 0 48px rgba(15, 23, 42, .22);
-            transform: translateX(24px);
+            box-shadow: -20px 0 60px rgba(15, 23, 42, .25);
+            /* Slide in from right — override the generic scale/translateY from .modal-box */
+            transform: translateX(100%);
+            transition: transform .32s cubic-bezier(.4, 0, .2, 1);
             display: flex;
             flex-direction: column;
         }
+        /* Open state — must come after .modal-overlay.open .modal-box rule in app.css */
         .modal-overlay.open .slot-modal {
             transform: translateX(0);
         }
@@ -48,6 +52,8 @@
         #form-single {
             flex: 1;
             min-height: 0;
+            display: flex;
+            flex-direction: column;
         }
         .slot-form-content {
             flex: 1;

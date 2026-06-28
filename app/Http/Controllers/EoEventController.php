@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Event;
-use App\Models\Venue;
+use App\Models\VenueBooking;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -38,23 +39,30 @@ class EoEventController extends EoBaseController
         ]);
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
+        $organizer = $this->resolveOrganizer($request);
+
         return view('eo.events.create', [
-            'event' => new Event(['venue_type' => 'INTERNAL', 'status' => 'DRAFT']),
-            'venues' => Venue::query()->orderBy('name')->get(),
+            'event'            => new Event(['venue_type' => 'INTERNAL', 'status' => 'DRAFT']),
+            'approvedBookings' => $this->approvedBookingsForOrganizer($organizer->id),
         ]);
     }
 
     public function store(StoreEventRequest $request): RedirectResponse
     {
         $organizer = $this->resolveOrganizer($request);
+        $validated = $request->validated();
+
+        if ($err = $this->checkVenueTimeConstraint($validated, $organizer->id)) {
+            return back()->withErrors($err)->withInput();
+        }
 
         $event = Event::create([
-            'id' => (string) Str::uuid(),
+            'id'           => (string) Str::uuid(),
             'organizer_id' => $organizer->id,
-            'status' => 'DRAFT',
-            ...$this->eventPayload($request->validated(), $request),
+            'status'       => 'DRAFT',
+            ...$this->eventPayload($validated, $request),
         ]);
 
         return to_route('eo.events.show', $event)
@@ -93,9 +101,11 @@ class EoEventController extends EoBaseController
                 ->with('status', 'Event tidak dapat diedit pada status ini.');
         }
 
+        $organizer = $this->resolveOrganizer($request);
+
         return view('eo.events.edit', [
-            'event' => $event,
-            'venues' => Venue::query()->orderBy('name')->get(),
+            'event'            => $event,
+            'approvedBookings' => $this->approvedBookingsForOrganizer($organizer->id),
         ]);
     }
 
@@ -108,11 +118,17 @@ class EoEventController extends EoBaseController
                 ->with('status', 'Event tidak dapat diedit pada status ini.');
         }
 
+        $validated = $request->validated();
+
+        if ($err = $this->checkVenueTimeConstraint($validated, $event->organizer_id)) {
+            return back()->withErrors($err)->withInput();
+        }
+
         if ($request->hasFile('banner') && $event->banner_url) {
             $this->deleteImageUrl($event->banner_url);
         }
 
-        $event->update($this->eventPayload($request->validated(), $request));
+        $event->update($this->eventPayload($validated, $request));
 
         return to_route('eo.events.show', $event)
             ->with('status', 'Event berhasil diperbarui.');
@@ -151,6 +167,38 @@ class EoEventController extends EoBaseController
 
         return to_route('eo.events.index')
             ->with('status', 'Event berhasil dibatalkan.');
+    }
+
+    private function approvedBookingsForOrganizer(string $organizerId): Collection
+    {
+        return VenueBooking::query()
+            ->with('venue')
+            ->where('organizer_id', $organizerId)
+            ->where('status', 'APPROVED')
+            ->orderBy('booking_start')
+            ->get();
+    }
+
+    /** @param array<string, mixed> $validated */
+    private function checkVenueTimeConstraint(array $validated, string $organizerId): ?array
+    {
+        if (($validated['venue_type'] ?? '') !== 'INTERNAL' || empty($validated['venue_id'])) {
+            return null;
+        }
+
+        $withinBooking = VenueBooking::query()
+            ->where('venue_id', $validated['venue_id'])
+            ->where('organizer_id', $organizerId)
+            ->where('status', 'APPROVED')
+            ->where('booking_start', '<=', $validated['event_start'])
+            ->where('booking_end', '>=', $validated['event_end'])
+            ->exists();
+
+        if ($withinBooking) {
+            return null;
+        }
+
+        return ['event_start' => 'Waktu event harus berada dalam rentang booking venue yang telah disetujui oleh admin.'];
     }
 
     /**
