@@ -1,67 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ config('app.description') }}">
-    <title>{{ config('app.name', 'WARTA WILWATIKTA') }} — Portal Event Bumi Mojokerto</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/brand-colored.png') }}">
-    <link rel="shortcut icon" href="{{ asset('images/brand-colored.png') }}">
-
-    <script>
-        (function () {
-            const theme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (theme === 'dark' || (!theme && prefersDark)) {
-                document.documentElement.classList.add('dark');
-            }
-        })();
-    </script>
-
-    <x-layouts.head-scripts />
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-</head>
-<body class="bg-white dark:bg-brand-dark-bg text-slate-900 dark:text-orange-50 antialiased">
-
-    {{-- ── Navbar ─────────────────────────────────────────── --}}
-    <header class="landing-nav fixed inset-x-0 top-0 z-50">
-        <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-            <a href="{{ route('landing') }}" class="flex items-center gap-2.5">
-                <img src="{{ asset('images/brand-colored.png') }}" alt="Logo" class="w-9 h-9 object-contain">
-                <div class="leading-tight">
-                    <p class="text-sm font-extrabold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</p>
-                    <p class="text-[10px] uppercase tracking-wider text-orange-200/70">Disporapar Mojokerto</p>
-                </div>
-            </a>
-
-            <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-orange-50/85">
-                <a href="#event-pilihan" class="hover:text-white">Event</a>
-                <a href="#untuk-siapa" class="hover:text-white">Untuk Siapa</a>
-                <a href="#tentang" class="hover:text-white">Tentang</a>
-            </nav>
-
-            <div class="flex items-center gap-2">
-                <button type="button" onclick="toggleTheme()" class="w-9 h-9 inline-flex items-center justify-center rounded-lg text-orange-100/80 hover:text-white hover:bg-white/10" aria-label="Toggle tema">
-                    <i data-lucide="moon" class="theme-icon-moon w-4 h-4"></i>
-                    <i data-lucide="sun" class="theme-icon-sun w-4 h-4 hidden"></i>
-                </button>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary btn-sm">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                        Dashboard
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="hidden sm:inline-flex btn btn-sm border border-white/20 bg-transparent text-white hover:bg-white/10">
-                        Masuk
-                    </a>
-                    <a href="{{ route('register') }}" class="btn btn-primary btn-sm">
-                        Daftar
-                    </a>
-                @endauth
-            </div>
-        </div>
-    </header>
-
+<x-layouts.landing>
     {{-- ── Hero ───────────────────────────────────────────── --}}
     <section class="landing-hero relative pt-32 pb-24 px-5 sm:px-8"
              style="--landmark-image: url('{{ asset('images/mojokerto-landmark.jpeg') }}')">
@@ -173,15 +110,9 @@
                         Event yang sudah disetujui Disporapar dan siap kedatangan pengunjung serta tenant UMKM.
                     </p>
                 </div>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-brand-red dark:text-orange-300 inline-flex items-center gap-1.5 hover:underline">
-                        Lihat semua <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-brand-red dark:text-orange-300 inline-flex items-center gap-1.5 hover:underline">
-                        Masuk untuk lihat semua <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                @endauth
+                <a href="{{ route('landing.events') }}" class="text-sm font-semibold text-brand-red dark:text-orange-300 inline-flex items-center gap-1.5 hover:underline">
+                    Lihat semua <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
             </div>
 
             @if ($featuredEvents->isEmpty())
@@ -192,31 +123,7 @@
             @else
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($featuredEvents as $event)
-                        <article class="landing-event-card fade-in">
-                            <div class="relative h-40 bg-slate-100 dark:bg-brand-dark-surface">
-                                @if ($event->banner_url)
-                                    <img src="{{ $event->banner_url }}" alt="Banner {{ $event->name }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center">
-                                        <i data-lucide="image" class="w-8 h-8 text-slate-300"></i>
-                                    </div>
-                                @endif
-                                <span class="absolute top-3 left-3 badge badge-orange bg-white/95">
-                                    {{ $event->event_start->format('d M Y') }}
-                                </span>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-semibold text-slate-900 dark:text-white line-clamp-1">{{ $event->name }}</h3>
-                                <p class="mt-1 text-xs text-slate-500 dark:text-orange-100/60 inline-flex items-center gap-1.5">
-                                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                                    {{ $event->venue?->name ?? $event->external_venue_name ?? 'Lokasi menyusul' }}
-                                </p>
-                                <p class="mt-3 text-xs text-slate-400 dark:text-orange-100/50 inline-flex items-center gap-1.5">
-                                    <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
-                                    Diselenggarakan oleh {{ $event->organizer?->organization_name }}
-                                </p>
-                            </div>
-                        </article>
+                        <x-landing.event-card :event="$event" />
                     @endforeach
                 </div>
             @endif
@@ -306,39 +213,4 @@
             </div>
         </div>
     </section>
-
-    {{-- ── Footer ─────────────────────────────────────────────── --}}
-    <footer class="landing-footer py-12 px-5 sm:px-8">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div class="flex items-center gap-2.5">
-                <img src="{{ asset('images/brand-white.png') }}" alt="Logo" class="w-8 h-8 object-contain">
-                <div>
-                    <p class="text-sm font-bold text-white">{{ config('app.name', 'WARTA WILWATIKTA') }}</p>
-                    <p class="text-xs text-orange-100/60">Dinas Kepemudaan, Olahraga &amp; Pariwisata Mojokerto</p>
-                </div>
-            </div>
-            <p class="text-xs text-orange-100/50">
-                &copy; {{ date('Y') }} {{ config('app.name', 'WARTA WILWATIKTA') }}. Bumi Wilwatikta, Kabupaten Mojokerto.
-            </p>
-        </div>
-    </footer>
-
-    <script>
-        function toggleTheme() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateThemeIcon(isDark);
-        }
-
-        function updateThemeIcon(isDark) {
-            document.querySelectorAll('.theme-icon-moon').forEach(el => el.style.display = isDark ? 'none' : 'block');
-            document.querySelectorAll('.theme-icon-sun').forEach(el => el.style.display = isDark ? 'block' : 'none');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateThemeIcon(document.documentElement.classList.contains('dark'));
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        });
-    </script>
-</body>
-</html>
+</x-layouts.landing>

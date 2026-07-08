@@ -25,6 +25,7 @@ use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('landing');
+Route::get('/agenda', [HomeController::class, 'events'])->name('landing.events');
 
 // ──────────────────────────────────────────────
 // Guest-only routes

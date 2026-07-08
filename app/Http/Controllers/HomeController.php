@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventOrganizer;
 use App\Models\EventSlot;
 use App\Models\Venue;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -14,6 +15,7 @@ class HomeController extends Controller
     {
         $featuredEvents = Event::query()
             ->with(['organizer', 'venue'])
+            ->withEventCounts()
             ->where('status', 'APPROVED')
             ->where('event_start', '>=', now())
             ->orderBy('event_start')
@@ -46,6 +48,25 @@ class HomeController extends Controller
         return view('welcome', [
             'featuredEvents' => $featuredEvents,
             'stats' => $stats,
+        ]);
+    }
+
+    public function events(Request $request): View
+    {
+        $search = $request->string('search')->toString();
+
+        $events = Event::query()
+            ->with(['organizer', 'venue'])
+            ->withEventCounts()
+            ->where('status', 'APPROVED')
+            ->search($search)
+            ->orderBy('event_start')
+            ->paginate(9)
+            ->withQueryString();
+
+        return view('landing.events', [
+            'events' => $events,
+            'search' => $search,
         ]);
     }
 }
