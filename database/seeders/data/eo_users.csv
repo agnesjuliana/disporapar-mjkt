@@ -1,0 +1,11 @@
+id,name,email,password_hash,role,status,is_verified
+USR-EO-002,Mojokerto Kreatif Production,eo2@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-003,Panorama Event Nusantara,eo3@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-004,Gemilang Pentas Budaya,eo4@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-005,Swara Loka Entertainment,eo5@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-006,Cahaya Nusantara Organizer,eo6@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-007,Majapahit Event Solutions,eo7@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-008,Bhumi Wilwatikta Creative,eo8@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-009,Trawas Adventure Events,eo9@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-010,Bumi Onje Organizer,eo10@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
+USR-EO-011,Reyog Mojopahit Production,eo11@disporapar.test,password,EVENT_ORGANIZER,ACTIVE,1
