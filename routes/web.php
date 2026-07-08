@@ -13,6 +13,7 @@ use App\Http\Controllers\EventCalendarController;
 use App\Http\Controllers\EventOrganizerController;
 use App\Http\Controllers\EventRegistrationController;
 use App\Http\Controllers\EventSlotController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ParticipantRegistrationController;
 use App\Http\Controllers\RegistrationAttendanceController;
 use App\Http\Controllers\RegistrationDocumentController;
@@ -23,9 +24,7 @@ use App\Http\Controllers\VenueBookingController;
 use App\Http\Controllers\VenueController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('landing');
+Route::get('/', [HomeController::class, 'index'])->name('landing');
 
 // ──────────────────────────────────────────────
 // Guest-only routes

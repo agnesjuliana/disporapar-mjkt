@@ -705,3 +705,124 @@ html:not(.dark) .auth-content .text-red-300 { color: #dc2626 !important; }
 .dark .vdp-error{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.25);color:#fca5a5;}
 
 .vdp-legend-dot{width:.75rem;height:.75rem;border-radius:.2rem;display:inline-block;vertical-align:middle;flex-shrink:0;}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   12 · LANDING PAGE (public marketing page, resources/views/welcome.blade.php)
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Nav sits directly over the (always-dark) hero photo and uses hardcoded
+   white text, so — unlike the rest of the page — it stays dark-glass in
+   both themes rather than following the light/dark toggle. */
+.landing-nav {
+    background: rgba(24,15,18,.72);
+    border-bottom: 1px solid rgba(254,215,170,.14);
+    backdrop-filter: blur(14px);
+}
+
+/* Hero: landmark photo + brand gradient + batik grid, mirrors .auth-visual */
+.landing-hero {
+    position: relative;
+    background:
+        linear-gradient(180deg, rgba(24,15,18,.5) 0%, rgba(36,20,23,.72) 62%, var(--mojo-dark-bg) 100%),
+        radial-gradient(circle at 15% 20%, rgba(217,119,6,.38), transparent 32%),
+        radial-gradient(circle at 88% 78%, rgba(15,118,110,.28), transparent 36%),
+        var(--landmark-image, linear-gradient(135deg, #5f161f 0%, #9a3412 48%, #0f766e 100%));
+    background-size: cover;
+    background-position: center 30%;
+}
+.landing-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(254,215,170,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(254,215,170,.09) 1px,transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+}
+
+.landing-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .3rem .9rem;
+    border-radius: 9999px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #ffedd5;
+    background: rgba(217,119,6,.22);
+    border: 1px solid rgba(254,215,170,.3);
+}
+
+/* Batik pattern band used as a section divider / accent strip */
+.landing-batik-band {
+    background-image: url('/images/mojokerto_pattern_1.jpeg');
+    background-size: 340px;
+    background-repeat: repeat;
+}
+.landing-batik-band > .landing-batik-overlay {
+    background: linear-gradient(180deg, var(--mojo-surface) 0%, rgba(255,247,237,.94) 100%);
+}
+.dark .landing-batik-band > .landing-batik-overlay {
+    background: linear-gradient(180deg, var(--mojo-dark-bg) 0%, rgba(24,15,18,.94) 100%);
+}
+
+.landing-stat-tile {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(254,215,170,.18);
+    border-radius: .875rem;
+    padding: 1rem 1.1rem;
+    backdrop-filter: blur(6px);
+}
+
+.landing-event-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    transition: transform .2s, box-shadow .2s;
+}
+.landing-event-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(159,18,57,.14); }
+.dark .landing-event-card {
+    background-color: var(--mojo-dark-card);
+    border-color: var(--mojo-dark-border);
+}
+
+.landing-role-card {
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    background: white;
+    padding: 1.5rem;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.landing-role-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 34px rgba(159,18,57,.12);
+    border-color: var(--mojo-gold);
+}
+.dark .landing-role-card {
+    background-color: var(--mojo-dark-card);
+    border-color: var(--mojo-dark-border);
+}
+
+.landing-cta {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--mojo-red) 0%, var(--mojo-terracotta) 55%, var(--mojo-gold) 120%);
+}
+.landing-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('/images/mojokerto_pattern_1.jpeg');
+    background-size: 300px;
+    opacity: .12;
+    mix-blend-mode: overlay;
+}
+
+.landing-footer {
+    background: var(--mojo-dark-bg);
+    border-top: 1px solid rgba(254,215,170,.12);
+}
