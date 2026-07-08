@@ -70,6 +70,7 @@ class EventOrganizerSeeder extends Seeder
                     'registration_deadline' => $registrationDeadline,
                     'slot_size' => (int) $row['slot_size'],
                     'capacity' => (int) $row['capacity'],
+                    'banner_url' => $row['banner_filename'] ? '/storage/event-banners/'.$row['banner_filename'] : null,
                     'status' => 'APPROVED',
                     'approved_by' => self::ADMIN_ID,
                     'approved_at' => $approvedAt,
