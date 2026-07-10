@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventClickLog;
 use App\Models\EventRegistration;
 use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -47,6 +49,13 @@ class EventController extends Controller
         $event->load(['organizer', 'venue'])->loadCount([
             'slots',
             'slots as booked_slots_count' => fn (Builder $query) => $query->where('is_booked', true),
+        ]);
+
+        EventClickLog::create([
+            'id' => (string) Str::uuid(),
+            'user_id' => $request->user()->id,
+            'event_id' => $event->id,
+            'category_id' => $event->category_id,
         ]);
 
         return view('tenant.events.show', [

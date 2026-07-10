@@ -21,6 +21,10 @@ class RegisterOrganizationRequest extends FormRequest
             'org_name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Password::min(8)],
+            // Minat kategori hanya wajib untuk registrasi tenant (dipakai untuk
+            // rekomendasi event), bukan untuk registrasi event organizer.
+            'interest_category_ids' => [$this->routeIs('register.tenant.store') ? 'required' : 'nullable', 'array', 'min:1'],
+            'interest_category_ids.*' => ['exists:categories,id'],
         ];
     }
 }

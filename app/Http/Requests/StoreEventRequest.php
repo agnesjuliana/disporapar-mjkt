@@ -17,6 +17,7 @@ class StoreEventRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'category_id' => ['required', 'exists:categories,id'],
             'venue_type' => ['required', Rule::in(['INTERNAL', 'EXTERNAL'])],
             'venue_id' => ['nullable', 'required_if:venue_type,INTERNAL', 'exists:venues,id'],
             'external_venue_name' => ['nullable', 'required_if:venue_type,EXTERNAL', 'string', 'max:255'],

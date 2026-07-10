@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\EventClickLog;
 use App\Models\ParticipantRegistration;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\SvgWriter;
@@ -52,6 +53,13 @@ class ParticipantRegistrationController extends Controller
             return to_route('participant-registrations.show', $existing)
                 ->with('status', 'Anda sudah terdaftar sebagai peserta event ini.');
         }
+
+        EventClickLog::create([
+            'id' => (string) Str::uuid(),
+            'user_id' => $request->user()->id,
+            'event_id' => $event->id,
+            'category_id' => $event->category_id,
+        ]);
 
         return view('masyarakat.participant-registrations.create', [
             'event' => $event,

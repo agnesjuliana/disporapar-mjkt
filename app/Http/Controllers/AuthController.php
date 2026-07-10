@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\RegisterMasyarakatRequest;
 use App\Http\Requests\Auth\RegisterOrganizationRequest;
+use App\Models\Category;
 use App\Models\EventOrganizer;
 use App\Models\Tenant;
 use App\Models\User;
@@ -83,7 +84,9 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('auth.masyarakat-registration');
+        return view('auth.masyarakat-registration', [
+            'categories' => Category::where('slug', '!=', 'umum')->orderBy('name')->get(),
+        ]);
     }
 
     public function registerMasyarakat(RegisterMasyarakatRequest $request): RedirectResponse
@@ -100,6 +103,8 @@ class AuthController extends Controller
             'is_verified' => false,
         ]);
 
+        $user->interestCategories()->attach($validated['interest_category_ids']);
+
         $this->sendVerificationOtp($user);
 
         return redirect()
@@ -113,7 +118,9 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('auth.tenant-registration');
+        return view('auth.tenant-registration', [
+            'categories' => Category::where('slug', '!=', 'umum')->orderBy('name')->get(),
+        ]);
     }
 
     public function registerTenant(RegisterOrganizationRequest $request): RedirectResponse
@@ -141,6 +148,8 @@ class AuthController extends Controller
                 'registration_status' => 'PENDING',
                 'registered_at' => now(),
             ]);
+
+            $user->interestCategories()->attach($validated['interest_category_ids']);
 
             return $user;
         });

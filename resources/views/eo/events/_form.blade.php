@@ -30,6 +30,17 @@
             </div>
 
             <div>
+                <label class="form-label" for="category_id">Kategori Event <span class="text-red-500">*</span></label>
+                <select name="category_id" id="category_id" required class="form-select">
+                    <option value="">-- Pilih kategori --</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @selected(old('category_id', $event->category_id) === $category->id)>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @error('category_id')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
                 <label class="form-label" for="banner">Banner Event</label>
                 @if ($event->banner_url)
                     <img src="{{ $event->banner_url }}" alt="Banner {{ $event->name }}" class="w-full h-36 object-cover rounded-xl mb-3">

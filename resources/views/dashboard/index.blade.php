@@ -46,6 +46,56 @@
             </div>
         </section>
 
+        @if (in_array($menu['role'], ['MASYARAKAT', 'TENANT'], true) && $recommendedEvents->isNotEmpty())
+            <section class="space-y-4">
+                <div>
+                    <p class="text-sm font-semibold text-brand-red dark:text-orange-300">Direkomendasikan Untuk Anda</p>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Event yang mungkin Anda sukai</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    @foreach ($recommendedEvents as $event)
+                        @php
+                            $venueName = $event->venue_type === 'EXTERNAL'
+                                ? $event->external_venue_name
+                                : $event->venue?->name;
+                            $detailHref = $menu['role'] === 'MASYARAKAT'
+                                ? route('participant-registrations.create', ['event_id' => $event->id])
+                                : route('events.show', $event);
+                        @endphp
+                        <a href="{{ $detailHref }}" class="card p-0 overflow-hidden group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                            <div class="h-32 bg-indigo-600 relative">
+                                @if ($event->banner_url)
+                                    <img src="{{ $event->banner_url }}" alt="Banner {{ $event->name }}" class="absolute inset-0 w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/25"></div>
+                                @else
+                                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-emerald-500"></div>
+                                @endif
+                                <div class="absolute left-4 bottom-4 right-4">
+                                    <span class="badge badge-green mb-2">{{ $event->status === 'ONGOING' ? 'Berlangsung' : 'Terjadwal' }}</span>
+                                    <h4 class="font-bold text-white leading-tight line-clamp-2">{{ $event->name }}</h4>
+                                </div>
+                            </div>
+                            <div class="p-4 space-y-2 text-xs text-slate-500 dark:text-orange-100/70">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400 dark:text-orange-200/70"></i>
+                                    <span>{{ $event->event_start?->format('d M Y H:i') }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400 dark:text-orange-200/70"></i>
+                                    <span class="truncate">{{ $venueName ?? 'Venue TBD' }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400 dark:text-orange-200/70"></i>
+                                    <span class="truncate">{{ $event->organizer?->organization_name ?? 'Disporapar' }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
         <section class="space-y-4">
             <div>
                 <p class="text-sm font-semibold text-brand-red dark:text-orange-300">Menu Akses</p>

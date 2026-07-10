@@ -1,0 +1,6 @@
+id,name,email,password_hash,status,is_verified,interest_slugs
+USR-MASYARAKAT-002,Warga Pecinta Budaya,masyarakat2@disporapar.test,password,ACTIVE,1,budaya
+USR-MASYARAKAT-003,Warga Pemburu Kuliner,masyarakat3@disporapar.test,password,ACTIVE,1,kuliner
+USR-MASYARAKAT-004,Warga Penikmat Musik,masyarakat4@disporapar.test,password,ACTIVE,1,musik-hiburan
+USR-MASYARAKAT-005,Warga Pemburu Bazar,masyarakat5@disporapar.test,password,ACTIVE,1,pameran-bazar
+USR-MASYARAKAT-006,Warga Petualang Alam,masyarakat6@disporapar.test,password,ACTIVE,1,"olahraga-petualangan,edukasi-workshop"

@@ -15,6 +15,7 @@
             @include('eo.events._form', [
                 'event'            => $event,
                 'approvedBookings' => $approvedBookings,
+                'categories'       => $categories,
                 'action'           => route('eo.events.update', $event),
                 'method'           => 'PUT',
                 'submitLabel'      => 'Simpan Perubahan',

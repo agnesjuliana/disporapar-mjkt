@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\EventOrganizer;
 use App\Models\EventSlot;
@@ -48,6 +49,7 @@ class EventOrganizerSeeder extends Seeder
         }
 
         $approvedAt = now();
+        $categoryIdsBySlug = Category::query()->pluck('id', 'slug');
 
         foreach ($this->readCsv('eo_events.csv') as $row) {
             $eventStart = now()->addDays((int) $row['start_offset_days'])->setTime(9, 0);
@@ -60,6 +62,7 @@ class EventOrganizerSeeder extends Seeder
                     'name' => $row['name'],
                     'description' => $row['description'],
                     'organizer_id' => $row['organizer_id'],
+                    'category_id' => $categoryIdsBySlug->get($row['category_slug'], $categoryIdsBySlug->get('umum')),
                     'venue_type' => 'INTERNAL',
                     'venue_id' => $row['venue_id'],
                     'external_venue_name' => null,

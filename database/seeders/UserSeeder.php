@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\EventOrganizer;
 use App\Models\Tenant;
 use App\Models\User;
@@ -88,6 +89,16 @@ class UserSeeder extends Seeder
                 'approved_by' => 'USR-ADMIN-001',
                 'approved_at' => now(),
             ],
+        );
+
+        $categoryIdsBySlug = Category::query()->pluck('id', 'slug');
+
+        User::find('USR-MASYARAKAT-001')?->interestCategories()->sync(
+            $categoryIdsBySlug->only(['budaya', 'kuliner'])->values(),
+        );
+
+        User::find('USR-TENANT-001')?->interestCategories()->sync(
+            $categoryIdsBySlug->only(['kuliner', 'pameran-bazar'])->values(),
         );
 
         $venues = [

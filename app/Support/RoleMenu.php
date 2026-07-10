@@ -24,6 +24,7 @@ class RoleMenu
                     ['icon' => 'building-2', 'label' => 'Manajemen Venue', 'page' => 'venues', 'href' => '/admin/venues', 'description' => 'Kelola data venue, kapasitas, harga, dan ketersediaan.'],
                     ['icon' => 'calendar-check', 'label' => 'Booking Venue', 'page' => 'venue-bookings', 'href' => '/admin/venue-bookings', 'description' => 'Tinjau dan setujui permintaan booking venue.'],
                     ['icon' => 'calendar-plus', 'label' => 'Manajemen Event', 'page' => 'events', 'href' => '/admin/events', 'description' => 'Verifikasi dan kelola pengajuan event baru.'],
+                    ['icon' => 'tags', 'label' => 'Manajemen Kategori', 'page' => 'categories', 'href' => '/admin/categories', 'description' => 'Kelola kategori event untuk EO dan minat masyarakat/tenant.'],
                     ['icon' => 'users', 'label' => 'Daftar Pengguna', 'page' => 'users', 'href' => '/users', 'description' => 'Kelola akun admin, EO, tenant, dan masyarakat.'],
                 ],
             ],

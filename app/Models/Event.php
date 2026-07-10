@@ -21,6 +21,7 @@ class Event extends Model
         'name',
         'description',
         'organizer_id',
+        'category_id',
         'venue_type',
         'venue_id',
         'external_venue_name',
@@ -87,6 +88,11 @@ class Event extends Model
     public function organizer(): BelongsTo
     {
         return $this->belongsTo(EventOrganizer::class, 'organizer_id');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function venue(): BelongsTo

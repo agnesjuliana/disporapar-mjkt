@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,6 +71,11 @@ class User extends Authenticatable
     public function participantRegistrations(): HasMany
     {
         return $this->hasMany(ParticipantRegistration::class);
+    }
+
+    public function interestCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'user_category_interests');
     }
 
     public function getAuthPassword()

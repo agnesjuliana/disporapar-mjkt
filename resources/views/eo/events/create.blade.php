@@ -14,6 +14,7 @@
             @include('eo.events._form', [
                 'event'            => $event,
                 'approvedBookings' => $approvedBookings,
+                'categories'       => $categories,
                 'action'           => route('eo.events.store'),
                 'submitLabel'      => 'Simpan sebagai Draft',
             ])

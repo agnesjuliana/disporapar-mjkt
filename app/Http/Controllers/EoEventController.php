@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEventRequest;
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\VenueBooking;
 use App\Traits\HandlesImageUpload;
@@ -46,6 +47,7 @@ class EoEventController extends EoBaseController
         return view('eo.events.create', [
             'event'            => new Event(['venue_type' => 'INTERNAL', 'status' => 'DRAFT']),
             'approvedBookings' => $this->approvedBookingsForOrganizer($organizer->id),
+            'categories'       => Category::where('slug', '!=', 'umum')->orderBy('name')->get(),
         ]);
     }
 
@@ -106,6 +108,7 @@ class EoEventController extends EoBaseController
         return view('eo.events.edit', [
             'event'            => $event,
             'approvedBookings' => $this->approvedBookingsForOrganizer($organizer->id),
+            'categories'       => Category::where('slug', '!=', 'umum')->orderBy('name')->get(),
         ]);
     }
 
@@ -211,6 +214,7 @@ class EoEventController extends EoBaseController
         $payload = [
             'name' => $validated['name'],
             'description' => $validated['description'] ?? '',
+            'category_id' => $validated['category_id'],
             'venue_type' => $venueType,
             'venue_id' => $venueType === 'INTERNAL' ? $validated['venue_id'] : null,
             'external_venue_name' => $venueType === 'EXTERNAL' ? $validated['external_venue_name'] : null,

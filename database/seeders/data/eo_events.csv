@@ -1,21 +1,21 @@
-id,organizer_id,name,description,venue_id,start_offset_days,duration_days,reg_deadline_days_before_start,slot_size,capacity,banner_filename
-EVT-002-1,EO-002,Festival Kuliner Mojokerto Bersinar,Festival kuliner khas Mojokerto dengan ratusan tenant UMKM dan panggung hiburan rakyat.,VENUE-001,17,2,5,200,400,evt-002-1.jpg
-EVT-002-2,EO-002,Pameran UMKM Kreatif Mojokerto,Pameran produk kreatif dan kerajinan UMKM lokal Mojokerto.,VENUE-001,20,1,5,200,400,evt-002-2.jpg
-EVT-003-1,EO-003,Konser Musik Panorama Malam,Konser musik akhir pekan menghadirkan musisi lokal dan nasional.,VENUE-002,22,2,5,750,1500,evt-003-1.jpg
-EVT-003-2,EO-003,Bazar Ramadhan Panorama Nusantara,"Bazar Ramadhan dengan aneka kuliner, busana, dan hiburan keluarga.",VENUE-002,25,1,5,750,1500,evt-003-2.jpg
-EVT-004-1,EO-004,Pagelaran Wayang Gemilang Budaya,Pagelaran wayang kulit semalam suntuk untuk melestarikan budaya Jawa Timur.,VENUE-003,27,2,5,60,120,evt-004-1.jpg
-EVT-004-2,EO-004,Festival Seni Tradisi Jawa Timur,Festival tari dan musik tradisional dari sanggar-sanggar seni Jawa Timur.,VENUE-003,30,1,5,60,120,evt-004-2.jpg
-EVT-005-1,EO-005,Swara Loka Music Festival,Festival musik outdoor lintas genre dengan puluhan penampil.,VENUE-001,32,2,5,200,400,evt-005-1.jpg
-EVT-005-2,EO-005,Pentas Seni Swara Loka,"Pentas seni gabungan musik, tari, dan teater komunitas.",VENUE-001,35,1,5,200,400,evt-005-2.jpg
-EVT-006-1,EO-006,Pameran Ekonomi Kreatif Cahaya Nusantara,Pameran ekonomi kreatif menampilkan produk unggulan daerah.,VENUE-002,37,2,5,750,1500,evt-006-1.jpg
-EVT-006-2,EO-006,Bazar UMKM Cahaya Nusantara,Bazar UMKM dengan promo dan demo produk lokal.,VENUE-002,40,1,5,750,1500,evt-006-2.jpg
-EVT-007-1,EO-007,Majapahit Heritage Festival,Festival budaya bertema kejayaan Majapahit dengan reka ulang sejarah.,VENUE-003,42,2,5,60,120,evt-007-1.jpg
-EVT-007-2,EO-007,Pasar Malam Majapahit,Pasar malam rakyat dengan wahana permainan dan kuliner.,VENUE-003,45,1,5,60,120,evt-007-2.jpg
-EVT-008-1,EO-008,Bhumi Wilwatikta Art Expo,Pameran seni rupa dan instalasi karya seniman lokal.,VENUE-001,47,2,5,200,400,evt-008-1.jpg
-EVT-008-2,EO-008,Festival Kuliner Nusantara Wilwatikta,Festival kuliner nusantara dengan konsep pasar terbuka.,VENUE-001,50,1,5,200,400,evt-008-2.jpg
-EVT-009-1,EO-009,Trawas Outdoor Festival,Festival outdoor bertema alam dan petualangan di kawasan Trawas.,VENUE-002,52,2,5,750,1500,evt-009-1.jpg
-EVT-009-2,EO-009,Trawas Adventure Bazaar,Bazar perlengkapan outdoor dan komunitas pecinta alam.,VENUE-002,55,1,5,750,1500,evt-009-2.jpg
-EVT-010-1,EO-010,Bumi Onje Cultural Fest,Festival budaya lokal dengan pertunjukan seni dan kuliner khas.,VENUE-003,57,2,5,60,120,evt-010-1.jpg
-EVT-010-2,EO-010,Pameran Kerajinan Bumi Onje,Pameran kerajinan tangan dan produk lokal daerah Onje.,VENUE-003,60,1,5,60,120,evt-010-2.jpg
-EVT-011-1,EO-011,Reyog Mojopahit Festival,Festival seni Reyog dengan kompetisi antar sanggar se-Jawa Timur.,VENUE-001,62,2,5,200,400,evt-011-1.jpg
-EVT-011-2,EO-011,Pentas Budaya Reyog Mojopahit,Pentas budaya kolaborasi seni tari dan musik tradisional.,VENUE-001,65,1,5,200,400,evt-011-2.jpg
+id,organizer_id,name,description,venue_id,start_offset_days,duration_days,reg_deadline_days_before_start,slot_size,capacity,banner_filename,category_slug
+EVT-002-1,EO-002,Festival Kuliner Mojokerto Bersinar,Festival kuliner khas Mojokerto dengan ratusan tenant UMKM dan panggung hiburan rakyat.,VENUE-001,17,2,5,200,400,evt-002-1.jpg,kuliner
+EVT-002-2,EO-002,Pameran UMKM Kreatif Mojokerto,Pameran produk kreatif dan kerajinan UMKM lokal Mojokerto.,VENUE-001,20,1,5,200,400,evt-002-2.jpg,pameran-bazar
+EVT-003-1,EO-003,Konser Musik Panorama Malam,Konser musik akhir pekan menghadirkan musisi lokal dan nasional.,VENUE-002,22,2,5,750,1500,evt-003-1.jpg,musik-hiburan
+EVT-003-2,EO-003,Bazar Ramadhan Panorama Nusantara,"Bazar Ramadhan dengan aneka kuliner, busana, dan hiburan keluarga.",VENUE-002,25,1,5,750,1500,evt-003-2.jpg,pameran-bazar
+EVT-004-1,EO-004,Pagelaran Wayang Gemilang Budaya,Pagelaran wayang kulit semalam suntuk untuk melestarikan budaya Jawa Timur.,VENUE-003,27,2,5,60,120,evt-004-1.jpg,budaya
+EVT-004-2,EO-004,Festival Seni Tradisi Jawa Timur,Festival tari dan musik tradisional dari sanggar-sanggar seni Jawa Timur.,VENUE-003,30,1,5,60,120,evt-004-2.jpg,budaya
+EVT-005-1,EO-005,Swara Loka Music Festival,Festival musik outdoor lintas genre dengan puluhan penampil.,VENUE-001,32,2,5,200,400,evt-005-1.jpg,musik-hiburan
+EVT-005-2,EO-005,Pentas Seni Swara Loka,"Pentas seni gabungan musik, tari, dan teater komunitas.",VENUE-001,35,1,5,200,400,evt-005-2.jpg,budaya
+EVT-006-1,EO-006,Pameran Ekonomi Kreatif Cahaya Nusantara,Pameran ekonomi kreatif menampilkan produk unggulan daerah.,VENUE-002,37,2,5,750,1500,evt-006-1.jpg,pameran-bazar
+EVT-006-2,EO-006,Bazar UMKM Cahaya Nusantara,Bazar UMKM dengan promo dan demo produk lokal.,VENUE-002,40,1,5,750,1500,evt-006-2.jpg,pameran-bazar
+EVT-007-1,EO-007,Majapahit Heritage Festival,Festival budaya bertema kejayaan Majapahit dengan reka ulang sejarah.,VENUE-003,42,2,5,60,120,evt-007-1.jpg,budaya
+EVT-007-2,EO-007,Pasar Malam Majapahit,Pasar malam rakyat dengan wahana permainan dan kuliner.,VENUE-003,45,1,5,60,120,evt-007-2.jpg,pameran-bazar
+EVT-008-1,EO-008,Bhumi Wilwatikta Art Expo,Pameran seni rupa dan instalasi karya seniman lokal.,VENUE-001,47,2,5,200,400,evt-008-1.jpg,budaya
+EVT-008-2,EO-008,Festival Kuliner Nusantara Wilwatikta,Festival kuliner nusantara dengan konsep pasar terbuka.,VENUE-001,50,1,5,200,400,evt-008-2.jpg,kuliner
+EVT-009-1,EO-009,Trawas Outdoor Festival,Festival outdoor bertema alam dan petualangan di kawasan Trawas.,VENUE-002,52,2,5,750,1500,evt-009-1.jpg,olahraga-petualangan
+EVT-009-2,EO-009,Trawas Adventure Bazaar,Bazar perlengkapan outdoor dan komunitas pecinta alam.,VENUE-002,55,1,5,750,1500,evt-009-2.jpg,pameran-bazar
+EVT-010-1,EO-010,Bumi Onje Cultural Fest,Festival budaya lokal dengan pertunjukan seni dan kuliner khas.,VENUE-003,57,2,5,60,120,evt-010-1.jpg,budaya
+EVT-010-2,EO-010,Pameran Kerajinan Bumi Onje,Pameran kerajinan tangan dan produk lokal daerah Onje.,VENUE-003,60,1,5,60,120,evt-010-2.jpg,pameran-bazar
+EVT-011-1,EO-011,Reyog Mojopahit Festival,Festival seni Reyog dengan kompetisi antar sanggar se-Jawa Timur.,VENUE-001,62,2,5,200,400,evt-011-1.jpg,budaya
+EVT-011-2,EO-011,Pentas Budaya Reyog Mojopahit,Pentas budaya kolaborasi seni tari dan musik tradisional.,VENUE-001,65,1,5,200,400,evt-011-2.jpg,budaya

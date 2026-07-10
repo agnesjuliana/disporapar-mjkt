@@ -71,6 +71,21 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="form-label text-slate-300">Pilih Minat Kategori Event</label>
+                    <p class="text-xs text-slate-500 mb-2">Dipakai untuk merekomendasikan event yang relevan buat Anda. Pilih minimal satu.</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        @foreach ($categories as $category)
+                            <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 cursor-pointer hover:border-indigo-500">
+                                <input type="checkbox" name="interest_category_ids[]" value="{{ $category->id }}"
+                                       class="rounded border-slate-600 bg-slate-900 text-indigo-500 focus:ring-indigo-500"
+                                       @checked(in_array($category->id, old('interest_category_ids', []), true))>
+                                {{ $category->name }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
                 <button type="submit" id="masyarakat-btn"
                         class="w-full btn py-2.5 justify-center text-sm font-semibold text-white"
                         style="background:linear-gradient(135deg,#c2410c,#9f1239);box-shadow:0 4px 15px rgba(159,18,57,.28)">

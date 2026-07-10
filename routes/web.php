@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminEventController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EoEventController;
 use App\Http\Controllers\EoEventSlotController;
@@ -61,6 +62,9 @@ Route::middleware('auth')->group(function () {
     // ── Admin ────────────────────────────────
     Route::middleware('role:ADMIN')->group(function () {
         Route::resource('admin/venues', VenueController::class)->names('admin.venues');
+        Route::resource('admin/categories', CategoryController::class)
+            ->except(['show'])
+            ->names('admin.categories');
 
         Route::resource('admin/venue-bookings', VenueBookingController::class)
             ->only(['index', 'show'])

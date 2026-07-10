@@ -103,6 +103,21 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="form-label text-slate-300">Pilih Minat Kategori Event</label>
+                    <p class="text-xs text-slate-500 mb-2">Dipakai untuk merekomendasikan event yang relevan buat usaha Anda. Pilih minimal satu.</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        @foreach ($categories as $category)
+                            <label class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 cursor-pointer hover:border-orange-500">
+                                <input type="checkbox" name="interest_category_ids[]" value="{{ $category->id }}"
+                                       class="rounded border-slate-600 bg-slate-900 text-orange-500 focus:ring-orange-500"
+                                       @checked(in_array($category->id, old('interest_category_ids', []), true))>
+                                {{ $category->name }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
                 <div class="flex items-start gap-2.5 bg-orange-950/50 border border-orange-800/40 rounded-xl p-3 mt-1">
                     <i data-lucide="info" class="w-4 h-4 text-orange-400 shrink-0 mt-0.5"></i>
                     <p class="text-orange-300 text-xs leading-relaxed">

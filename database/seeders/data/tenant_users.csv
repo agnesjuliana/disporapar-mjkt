@@ -1,0 +1,6 @@
+id,tenant_id,name,email,password_hash,org_name,contact_person,contact_phone,address,interest_slugs
+USR-TENANT-002,TNT-002,UMKM Kuliner Nusantara,tenant2@disporapar.test,password,UMKM Kuliner Nusantara,Siti Aminah,081234500102,Mojokerto,"kuliner,pameran-bazar"
+USR-TENANT-003,TNT-003,UMKM Kriya Budaya,tenant3@disporapar.test,password,UMKM Kriya Budaya,Bagus Wirawan,081234500103,Mojokerto,"budaya,pameran-bazar"
+USR-TENANT-004,TNT-004,UMKM Musik Kreatif,tenant4@disporapar.test,password,UMKM Musik Kreatif,Dewi Anjani,081234500104,Mojokerto,musik-hiburan
+USR-TENANT-005,TNT-005,UMKM Outdoor Gear,tenant5@disporapar.test,password,UMKM Outdoor Gear,Rangga Saputra,081234500105,Mojokerto,olahraga-petualangan
+USR-TENANT-006,TNT-006,UMKM Edukasi Kreatif,tenant6@disporapar.test,password,UMKM Edukasi Kreatif,Ratna Sari,081234500106,Mojokerto,edukasi-workshop
