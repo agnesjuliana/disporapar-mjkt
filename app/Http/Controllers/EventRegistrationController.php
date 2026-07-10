@@ -7,6 +7,8 @@ use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventSlot;
 use App\Models\Tenant;
+use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
+use Endroid\QrCode\Writer\SvgWriter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -148,8 +150,19 @@ class EventRegistrationController extends Controller
             'attendance',
         ]);
 
+        $qrCodeSvg = null;
+        if ($eventRegistration->registration_status === 'APPROVED') {
+            $qrCode = (new QrCodeBuilder(writer: new SvgWriter()))->build(
+                data: $eventRegistration->id,
+                size: 220,
+                margin: 8,
+            );
+            $qrCodeSvg = $qrCode->getString();
+        }
+
         return view('tenant.registrations.show', [
             'registration' => $eventRegistration,
+            'qrCodeSvg' => $qrCodeSvg,
         ]);
     }
 

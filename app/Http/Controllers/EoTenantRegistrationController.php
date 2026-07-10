@@ -6,6 +6,7 @@ use App\Http\Requests\SlotAssignmentRequest;
 use App\Models\Event;
 use App\Models\EventRegistration;
 use App\Models\EventSlot;
+use App\Models\RegistrationAttendance;
 use App\Models\RegistrationSlot;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +25,7 @@ class EoTenantRegistrationController extends EoBaseController
         $search = $request->string('search')->toString();
 
         $registrations = $event->registrations()
-            ->with(['tenant.user', 'slots.slot'])
+            ->with(['tenant.user', 'slots.slot', 'attendance'])
             ->withCount('slots')
             ->where('registration_status', '!=', 'CANCELLED')
             ->when($status, fn (Builder $query) => $query->where('registration_status', $status))
@@ -138,6 +139,44 @@ class EoTenantRegistrationController extends EoBaseController
             ->with('status', 'Pendaftaran tenant ditolak.');
     }
 
+    public function checkIn(Request $request, Event $event): RedirectResponse
+    {
+        $this->authorizeEvent($request, $event);
+
+        $validated = $request->validate([
+            'code' => ['required', 'string'],
+        ]);
+
+        $registration = EventRegistration::query()
+            ->with(['tenant', 'attendance'])
+            ->find($validated['code']);
+
+        if (! $registration || $registration->event_id !== $event->id) {
+            return back()->with('error', 'Kode QR tidak dikenali atau bukan untuk event ini.');
+        }
+
+        if ($registration->registration_status !== 'APPROVED') {
+            return back()->with('error', 'Tenant ini belum disetujui untuk event ini.');
+        }
+
+        $attendance = $registration->attendance ?? RegistrationAttendance::create([
+            'id' => (string) Str::uuid(),
+            'event_registration_id' => $registration->id,
+            'attendance_status' => 'NOT_CHECKED_IN',
+        ]);
+
+        if ($attendance->attendance_status === 'PRESENT') {
+            return back()->with('error', "Tenant {$registration->tenant?->organization_name} sudah check-in sebelumnya pada {$attendance->checked_in_at?->format('d M Y H:i')}.");
+        }
+
+        $attendance->update([
+            'attendance_status' => 'PRESENT',
+            'checked_in_at' => now(),
+        ]);
+
+        return back()->with('status', "Check-in berhasil untuk tenant {$registration->tenant?->organization_name}.");
+    }
+
     /**
      * @param  array<int, string>  $slotIds
      */
@@ -220,6 +259,11 @@ class EoTenantRegistrationController extends EoBaseController
                     'approved_at' => now(),
                     'rejection_reason' => null,
                 ]);
+
+                RegistrationAttendance::firstOrCreate(
+                    ['event_registration_id' => $lockedRegistration->id],
+                    ['id' => (string) Str::uuid(), 'attendance_status' => 'NOT_CHECKED_IN'],
+                );
             }
         });
 

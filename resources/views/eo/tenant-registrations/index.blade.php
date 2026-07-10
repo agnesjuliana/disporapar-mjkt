@@ -10,11 +10,53 @@
             <h2 class="page-title mt-1">Manajemen Tenant</h2>
             <p class="page-subtitle">Tinjau pendaftaran tenant dan tetapkan slot untuk {{ $event->name }}.</p>
         </div>
-        <a href="{{ route('eo.events.slots.index', $event) }}" class="btn btn-secondary btn-sm">
-            <i data-lucide="grid-2x2" class="w-4 h-4"></i>
-            Kelola Slot
-        </a>
+        <div class="flex gap-2">
+            <button type="button" onclick="openModal('scan-tenant-checkin-modal')" class="btn btn-primary btn-sm">
+                <i data-lucide="scan-line" class="w-4 h-4"></i>
+                Scan Presensi Tenant
+            </button>
+            <a href="{{ route('eo.events.slots.index', $event) }}" class="btn btn-secondary btn-sm">
+                <i data-lucide="grid-2x2" class="w-4 h-4"></i>
+                Kelola Slot
+            </a>
+        </div>
     </div>
+
+    @push('modals')
+    <div id="scan-tenant-checkin-modal" class="modal-overlay">
+        <div class="modal-box" style="max-width:420px;">
+            <div class="p-5 pb-4 border-b border-slate-100 dark:border-slate-700 flex items-start justify-between gap-3">
+                <div>
+                    <h3 class="font-semibold text-base text-slate-800 dark:text-slate-100">Scan Presensi Tenant</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Arahkan kamera ke QR code milik tenant.</p>
+                </div>
+                <button type="button" onclick="closeModal('scan-tenant-checkin-modal')" class="btn btn-ghost btn-icon shrink-0 -mt-0.5">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4">
+                <div id="tenant-qr-scanner-region" class="rounded-xl overflow-hidden bg-slate-900" style="min-height:240px;"></div>
+                <p id="tenant-qr-scanner-status" class="text-xs text-slate-400 text-center">Menyiapkan kamera...</p>
+
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="bg-white dark:bg-(--mojo-dark-card) px-2 text-xs text-slate-400">atau masukkan manual</span>
+                    </div>
+                </div>
+
+                <form method="POST" action="{{ route('eo.events.tenant-registrations.check-in', $event) }}" id="tenant-manual-checkin-form" class="flex gap-2">
+                    @csrf
+                    <input type="text" name="code" id="tenant-manual-checkin-code" class="form-input text-sm py-1.5 font-mono" placeholder="Tempel kode booking tenant">
+                    <button type="submit" class="btn btn-primary btn-sm shrink-0">Check-in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endpush
 
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-5">
         @foreach ([
@@ -77,6 +119,7 @@
                             <th>Preferensi</th>
                             <th>Slot Final</th>
                             <th>Status</th>
+                            <th>Presensi</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
@@ -117,6 +160,13 @@
                                     @endif
                                 </td>
                                 <td><x-ui.status-badge :status="$registration->registration_status" /></td>
+                                <td>
+                                    @if ($registration->registration_status === 'APPROVED')
+                                        <x-ui.status-badge :status="$registration->attendance?->attendance_status ?? 'NOT_CHECKED_IN'" />
+                                    @else
+                                        <span class="text-xs text-slate-400">-</span>
+                                    @endif
+                                </td>
                                 <td class="text-xs text-slate-400 whitespace-nowrap">{{ $registration->registered_at?->format('d M Y H:i') }}</td>
                                 <td>
                                     <a href="{{ route('eo.events.tenant-registrations.show', [$event, $registration]) }}" class="btn btn-secondary btn-sm">
@@ -134,4 +184,64 @@
             </div>
         @endif
     </div>
+
+    @push('scripts')
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        'use strict';
+
+        var modalEl = document.getElementById('scan-tenant-checkin-modal');
+        var statusEl = document.getElementById('tenant-qr-scanner-status');
+        var manualForm = document.getElementById('tenant-manual-checkin-form');
+        var manualInput = document.getElementById('tenant-manual-checkin-code');
+        var scanner = null;
+
+        function stopScanner() {
+            if (!scanner) return;
+            var current = scanner;
+            scanner = null;
+            current.stop().catch(function () {}).finally(function () {
+                current.clear();
+            });
+        }
+
+        function startScanner() {
+            if (typeof Html5Qrcode === 'undefined') {
+                statusEl.textContent = 'Kamera tidak tersedia. Gunakan input manual di bawah.';
+                return;
+            }
+
+            scanner = new Html5Qrcode('tenant-qr-scanner-region');
+            scanner.start(
+                { facingMode: 'environment' },
+                { fps: 10, qrbox: 220 },
+                function (decodedText) {
+                    if (!manualForm) return;
+                    statusEl.textContent = 'QR terdeteksi, memproses check-in...';
+                    stopScanner();
+                    manualInput.value = decodedText;
+                    manualForm.submit();
+                },
+                function () { /* abaikan kegagalan pemindaian per-frame */ }
+            ).then(function () {
+                statusEl.textContent = 'Arahkan kamera ke QR code tenant.';
+            }).catch(function () {
+                statusEl.textContent = 'Tidak bisa mengakses kamera. Gunakan input manual di bawah.';
+            });
+        }
+
+        if (modalEl) {
+            new MutationObserver(function () {
+                if (modalEl.classList.contains('open')) {
+                    statusEl.textContent = 'Menyiapkan kamera...';
+                    startScanner();
+                } else {
+                    stopScanner();
+                }
+            }).observe(modalEl, { attributes: true, attributeFilter: ['class'] });
+        }
+    });
+    </script>
+    @endpush
 </x-layouts.app>

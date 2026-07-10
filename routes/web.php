@@ -110,6 +110,8 @@ Route::middleware('auth')->group(function () {
             ->name('eo.events.tenant-registrations.assign');
         Route::post('/eo/events/{event}/tenant-registrations/{registration}/reject', [EoTenantRegistrationController::class, 'reject'])
             ->name('eo.events.tenant-registrations.reject');
+        Route::post('/eo/events/{event}/tenant-registrations/check-in', [EoTenantRegistrationController::class, 'checkIn'])
+            ->name('eo.events.tenant-registrations.check-in');
 
         Route::get('/eo/events/{event}/slots', [EoEventSlotController::class, 'index'])->name('eo.events.slots.index');
         Route::post('/eo/events/{event}/slots', [EoEventSlotController::class, 'store'])->name('eo.events.slots.store');

@@ -82,6 +82,24 @@
                     </div>
                 </div>
             </div>
+
+            @if ($registration->registration_status === 'APPROVED' && $qrCodeSvg)
+                <div class="card text-center">
+                    <div class="w-[220px] h-[220px] max-w-full rounded-2xl bg-white p-3 mx-auto mb-3 flex items-center justify-center">
+                        {!! $qrCodeSvg !!}
+                    </div>
+                    <p class="text-xs text-slate-400 mb-1">Kode Presensi</p>
+                    <p class="font-mono text-sm font-semibold break-all">{{ $registration->id }}</p>
+                    <p class="text-xs text-slate-400 mt-2">Tunjukkan QR ini ke panitia saat check-in di lokasi event.</p>
+                    <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <p class="text-xs text-slate-500 font-medium mb-1">Status Presensi</p>
+                        <x-ui.status-badge :status="$registration->attendance?->attendance_status ?? 'NOT_CHECKED_IN'" />
+                        @if ($registration->attendance?->checked_in_at)
+                            <p class="text-xs text-slate-400 mt-1">Check-in: {{ $registration->attendance->checked_in_at->format('d M Y H:i') }}</p>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="lg:col-span-2 space-y-5">
