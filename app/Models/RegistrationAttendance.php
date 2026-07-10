@@ -12,6 +12,7 @@ class RegistrationAttendance extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'event_registration_id',
         'attendance_status',
         'checked_in_at',
