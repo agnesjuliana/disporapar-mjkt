@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\ParticipantRegistration;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\SvgWriter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -104,8 +106,15 @@ class ParticipantRegistrationController extends Controller
 
         $participantRegistration->load(['event.organizer', 'event.venue', 'user']);
 
+        $qrCode = (new Builder(writer: new SvgWriter()))->build(
+            data: $participantRegistration->id,
+            size: 220,
+            margin: 8,
+        );
+
         return view('masyarakat.participant-registrations.show', [
             'registration' => $participantRegistration,
+            'qrCodeSvg' => $qrCode->getString(),
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\ParticipantRegistration;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -52,5 +53,33 @@ class EoParticipantRegistrationController extends EoBaseController
             'search' => $search,
             'attendanceStatus' => $attendanceStatus,
         ]);
+    }
+
+    public function checkIn(Request $request, Event $event): RedirectResponse
+    {
+        $this->authorizeEvent($request, $event);
+
+        $validated = $request->validate([
+            'code' => ['required', 'string'],
+        ]);
+
+        $registration = ParticipantRegistration::query()
+            ->with('user')
+            ->find($validated['code']);
+
+        if (! $registration || $registration->event_id !== $event->id) {
+            return back()->with('error', 'Kode QR tidak dikenali atau bukan untuk event ini.');
+        }
+
+        if ($registration->attendance_status === 'PRESENT') {
+            return back()->with('error', "Peserta {$registration->user?->name} sudah check-in sebelumnya pada {$registration->checked_in_at?->format('d M Y H:i')}.");
+        }
+
+        $registration->update([
+            'attendance_status' => 'PRESENT',
+            'checked_in_at' => now(),
+        ]);
+
+        return back()->with('status', "Check-in berhasil untuk {$registration->user?->name}.");
     }
 }

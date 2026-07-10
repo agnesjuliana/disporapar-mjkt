@@ -97,6 +97,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/eo/events/{event}/visitors', [EoParticipantRegistrationController::class, 'index'])
             ->name('eo.events.visitors.index');
+        Route::post('/eo/events/{event}/visitors/check-in', [EoParticipantRegistrationController::class, 'checkIn'])
+            ->name('eo.events.visitors.check-in');
 
         Route::get('/eo/events/{event}/tenant-registrations', [EoTenantRegistrationController::class, 'index'])
             ->name('eo.events.tenant-registrations.index');

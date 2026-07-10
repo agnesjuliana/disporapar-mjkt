@@ -56,11 +56,12 @@
 
         <div class="space-y-4">
             <div class="card text-center">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 flex items-center justify-center mx-auto mb-3">
-                    <i data-lucide="qr-code" class="w-8 h-8"></i>
+                <div class="w-[220px] h-[220px] max-w-full rounded-2xl bg-white p-3 mx-auto mb-3 flex items-center justify-center">
+                    {!! $qrCodeSvg !!}
                 </div>
                 <p class="text-xs text-slate-400 mb-1">Kode Pendaftaran</p>
                 <p class="font-mono text-sm font-semibold break-all">{{ $registration->id }}</p>
+                <p class="text-xs text-slate-400 mt-2">Tunjukkan QR ini ke panitia saat check-in di lokasi event.</p>
             </div>
             <a href="{{ route('event.calendar', ['date' => $event?->event_start?->format('Y-m-d'), 'month' => $event?->event_start?->format('Y-m')]) }}" class="btn btn-secondary w-full justify-center">
                 <i data-lucide="calendar-days" class="w-4 h-4"></i>
