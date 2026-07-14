@@ -145,8 +145,9 @@ class AuthController extends Controller
                 'contact_person' => $validated['name'],
                 'contact_phone' => $validated['phone'],
                 'address' => $validated['address'],
-                'registration_status' => 'PENDING',
+                'registration_status' => 'APPROVED',
                 'registered_at' => now(),
+                'approved_at' => now(),
             ]);
 
             $user->interestCategories()->attach($validated['interest_category_ids']);

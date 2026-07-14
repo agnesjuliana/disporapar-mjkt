@@ -59,7 +59,6 @@
                                             <span class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center font-bold text-sm peer-checked:bg-indigo-100">
                                                 {{ $slot->slot_number }}
                                             </span>
-                                            <span class="text-[11px] text-slate-400">{{ (float) $slot->price > 0 ? 'Rp '.number_format((float) $slot->price, 0, ',', '.') : 'Gratis' }}</span>
                                         </div>
                                         <p class="text-sm font-medium text-slate-700 dark:text-slate-200 mt-2 truncate">{{ $slot->slot_label ?: 'Slot #'.$slot->slot_number }}</p>
                                         <p class="text-[11px] text-slate-400 mt-0.5">
