@@ -10,6 +10,8 @@ return new class extends Migration
         if (DB::getDriverName() === 'pgsql') {
             DB::statement('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_status_check');
             DB::statement('ALTER TABLE users ALTER COLUMN status TYPE varchar(255)');
+        } elseif (in_array(DB::getDriverName(), ['mysql', 'mariadb'])) {
+            DB::statement('ALTER TABLE users MODIFY status VARCHAR(255) NOT NULL');
         }
 
         DB::table('users')
